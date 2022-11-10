@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:sabia_app/Screens/FeedScreen.dart';
 
 import 'Screens/WelcomeScreen.dart';
 
@@ -15,6 +17,19 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  Widget getScreenId() {
+    return StreamBuilder(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (BuildContext context, snapshot) {
+        if (snapshot.hasData) {
+          return const FeedScreen();
+        } else {
+          return const WelcomeScreen();
+        }
+      },
+    );
+  }
+
   const MyApp({super.key});
 
   @override
@@ -22,7 +37,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: true,
       theme: ThemeData.light(),
-      home: const WelcomeScreen(),
+      home: getScreenId(),
     );
   }
 }
