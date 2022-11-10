@@ -49,6 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
             RoundedButton(
                 btnText: 'Entrar', onBtnPressed: () => print('log in'))
             //  ajustar com AuthService.logIn
+            //  teste
           ],
         ),
       ),
