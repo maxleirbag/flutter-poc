@@ -5,7 +5,6 @@ import 'Screens/WelcomeScreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp();
   const options = FirebaseOptions(
       apiKey: "AIzaSyDumexmX5nkr5L4tsjKU_zY0mEoyzCb1sQ",
       appId: "1:415516467757:android:394f36a7a2c63f60d04ea4",
