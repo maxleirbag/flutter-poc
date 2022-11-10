@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'Widgets/RoundedButton.dart';
+import '../Services/auth_service.dart';
+import '../Widgets/RoundedButton.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({Key? key}) : super(key: key);
@@ -50,17 +51,30 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             const SizedBox(
               height: 30,
             ),
-            const TextField(
+            TextField(
+              onChanged: (value) {
+                _password = value;
+              },
               obscureText: true,
-              decoration: InputDecoration(hintText: 'Enter your new password'),
+              decoration:
+                  const InputDecoration(hintText: 'Enter your new password'),
             ),
             const SizedBox(
               height: 30,
             ),
             RoundedButton(
-                btnText: 'Criar conta',
-                onBtnPressed: () => print('criação de conta'))
-            //  ajustar com AuthService.signUp()
+              btnText: 'Criar conta',
+              // onBtnPressed: () => print('criação de conta'))
+              onBtnPressed: () async {
+                bool isValid =
+                    await AuthService.signUp(_name, _email, _password);
+                if (isValid) {
+                  Navigator.pop(context);
+                } else {
+                  print('impossível criar conta');
+                }
+              },
+            )
           ],
         ),
       ),

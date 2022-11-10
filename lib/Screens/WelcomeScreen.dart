@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sabia_app/Screens/LoginScreen.dart';
 import 'package:sabia_app/Screens/RegistrationScreen.dart';
-import 'Widgets/RoundedButton.dart';
+import '../Widgets/RoundedButton.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
