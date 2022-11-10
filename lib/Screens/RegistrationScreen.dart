@@ -64,11 +64,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             ),
             RoundedButton(
               btnText: 'Criar conta',
-              // onBtnPressed: () => print('criação de conta'))
               onBtnPressed: () async {
                 bool isValid =
                     await AuthService.signUp(_name, _email, _password);
                 if (isValid) {
+                  print('Conta criada');
                   Navigator.pop(context);
                 } else {
                   print('impossível criar conta');

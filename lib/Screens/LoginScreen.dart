@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sabia_app/Widgets/RoundedButton.dart';
 
+import '../Services/auth_service.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -39,17 +41,28 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(
               height: 30,
             ),
-            const TextField(
+            TextField(
               obscureText: true,
               decoration: InputDecoration(hintText: 'Enter your password'),
+              onChanged: (value) {
+                _password = value;
+              },
             ),
             const SizedBox(
               height: 30,
             ),
             RoundedButton(
-                btnText: 'Entrar', onBtnPressed: () => print('log in'))
-            //  ajustar com AuthService.logIn
-            //  teste
+              btnText: 'Log In',
+              onBtnPressed: () async {
+                bool isValid = await AuthService.signIn(_email, _password);
+                if (isValid) {
+                  print('Entrou');
+                  Navigator.pop(context);
+                } else {
+                  print('impossível logar');
+                }
+              },
+            )
           ],
         ),
       ),
