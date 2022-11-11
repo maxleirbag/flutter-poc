@@ -11,10 +11,13 @@ class AuthService {
           email: email, password: password);
       User? signedInUser = authResult.user;
       if (signedInUser != null) {
-        _firestore
-            .collection('users')
-            .doc(signedInUser.uid)
-            .set({'name': name, 'email': email, 'profilePicture': ''});
+        _firestore.collection('users').doc(signedInUser.uid).set({
+          'name': name,
+          'email': email,
+          'profilePicture': '',
+          'coverImage': '',
+          'bio': ''
+        });
         print('Usuário registrado com sucesso');
         return true;
       }

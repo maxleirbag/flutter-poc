@@ -40,7 +40,11 @@ android {
         applicationId "com.example.sabia_app"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-build-configuration.
-        minSdkVersion flutter.minSdkVersion
+       // minSdkVersion flutter.minSdkVersion
+//        minSdkVersion 19    // This over here
+//        targetSdkVersion 33
+//        versionCode 1
+//        versionName "1.0"
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
