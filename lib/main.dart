@@ -1,11 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sabia_app/Screens/FeedScreen.dart';
 
 import 'Screens/WelcomeScreen.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   const options = FirebaseOptions(
       apiKey: "AIzaSyDumexmX5nkr5L4tsjKU_zY0mEoyzCb1sQ",
@@ -22,7 +23,16 @@ class MyApp extends StatelessWidget {
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (BuildContext context, snapshot) {
         if (snapshot.hasData) {
-          return const FeedScreen();
+          if (kDebugMode) {
+            print(snapshot.hasData
+                ? snapshot.data!.uid.toString()
+                : 'sem usuário');
+          }
+          return FeedScreen(
+            currentUserId: snapshot.hasData
+                ? snapshot.data!.uid.toString()
+                : 'sem usuário',
+          );
         } else {
           return const WelcomeScreen();
         }

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 
 class AuthService {
   static final _auth = FirebaseAuth.instance;
@@ -36,6 +37,16 @@ class AuthService {
       print(e);
       print('login problem');
       return false;
+    }
+  }
+
+  static void logout() {
+    try {
+      _auth.signOut();
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 }
