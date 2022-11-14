@@ -260,14 +260,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       //           ),
                       //   ],
                       // ),
-                      // SizedBox(height: 10),
-                      // Text(
-                      //   user.name,
-                      //   style: TextStyle(
-                      //     fontSize: 20,
-                      //     fontWeight: FontWeight.bold,
-                      //   ),
-                      // ),
+                      const SizedBox(height: 10),
+                      Text(
+                        user.name,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       const SizedBox(height: 10),
                       Text(
                         user.bio,
