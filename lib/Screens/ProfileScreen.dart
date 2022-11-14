@@ -84,7 +84,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       case 0:
         return ListView.builder(
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             itemCount: _allZipZops.length,
             itemBuilder: (context, index) {
               return ZipZopContainer(
@@ -93,11 +93,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 zipZop: _allZipZops[index],
               );
             });
-        break;
       case 1:
         return ListView.builder(
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             itemCount: _mediaZipZops.length,
             itemBuilder: (context, index) {
               return ZipZopContainer(
@@ -125,10 +124,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation(Colors.red)));
             }
-            // return Center();
             User user = User.fromDoc(snapshot.data);
             return ListView(
-              physics: BouncingScrollPhysics(
+              physics: const BouncingScrollPhysics(
                   parent: AlwaysScrollableScrollPhysics()),
               children: [
                 Container(
@@ -152,14 +150,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         SizedBox.shrink(),
                         widget.currentUserId == widget.visitedUserId
                             ? PopupMenuButton(
-                                icon: Icon(
+                                icon: const Icon(
                                   Icons.more_horiz,
                                   color: Colors.white,
                                   size: 30,
                                 ),
                                 itemBuilder: (_) {
                                   return <PopupMenuItem<String>>[
-                                    new PopupMenuItem(
+                                    const PopupMenuItem(
                                       child: Text('Logout'),
                                       value: 'logout',
                                     )
@@ -172,18 +170,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                WelcomeScreen()));
+                                                const WelcomeScreen()));
                                   }
                                 },
                               )
-                            : SizedBox(),
+                            : const SizedBox(),
                       ],
                     ),
                   ),
                 ),
                 Container(
                   transform: Matrix4.translationValues(0.0, -40.0, 0.0),
-                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -270,28 +268,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       //     fontWeight: FontWeight.bold,
                       //   ),
                       // ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Text(
                         user.bio,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 15,
                         ),
                       ),
-                      SizedBox(height: 15),
+                      const SizedBox(height: 15),
                       Row(
                         children: [
                           Text(
                             '$_followingCount Following',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
                               letterSpacing: 2,
                             ),
                           ),
-                          SizedBox(width: 20),
+                          const SizedBox(width: 20),
                           Text(
                             '$_followersCount Followers',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
                               letterSpacing: 2,
@@ -299,8 +297,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 20),
-                      Container(
+                      const SizedBox(height: 20),
+                      SizedBox(
                         width: MediaQuery.of(context).size.width,
                         child: CupertinoSlidingSegmentedControl(
                           groupValue: _profileSegmentedValue,

@@ -10,9 +10,6 @@ class DatabaseServices {
     return followersSnapshot.docs.length;
   }
 
-  // static void unFollowUser(String currentUserId, String visitedUserId) {}
-  //
-  // static void followUser(String currentUserId, String visitedUserId) {}
   static void followUser(String currentUserId, String visitedUserId) {
     followingRef
         .doc(currentUserId)
