@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:sabia_app/Screens/FeedScreen.dart';
 
-class CreateZopScreen extends StatefulWidget {
-  const CreateZopScreen({Key? key}) : super(key: key);
+class CreateZipZopScreen extends StatefulWidget {
+  const CreateZipZopScreen({Key? key}) : super(key: key);
 
   @override
-  State<CreateZopScreen> createState() => _CreateZopScreenState();
+  State<CreateZipZopScreen> createState() => _CreateZipZopScreenState();
 }
 
-class _CreateZopScreenState extends State<CreateZopScreen> {
+class _CreateZipZopScreenState extends State<CreateZipZopScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,8 +18,11 @@ class _CreateZopScreenState extends State<CreateZopScreen> {
           FloatingActionButton(
             backgroundColor: Colors.white,
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const FeedScreen()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          const FeedScreen(currentUserId: 'a')));
             },
             child: const Icon(
               Icons.arrow_left,

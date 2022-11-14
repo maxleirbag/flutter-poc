@@ -1,14 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'CreateZopScreen.dart';
+import 'CreateZipZopScreen.dart';
 import 'HomeScreen.dart';
 import 'NotificationScreen.dart';
 import 'ProfileScreen.dart';
 import 'SearchScreen.dart';
 
 class FeedScreen extends StatefulWidget {
-  const FeedScreen({Key? key}) : super(key: key);
+  final String currentUserId;
+  const FeedScreen({Key? key, required this.currentUserId}) : super(key: key);
 
   @override
   State<FeedScreen> createState() => _FeedScreenState();
@@ -16,21 +17,30 @@ class FeedScreen extends StatefulWidget {
 
 class _FeedScreenState extends State<FeedScreen> {
   int selectedTab = 0;
-  final List<Widget> _feedScreens = [
-    const HomeScreen(),
-    const SearchScreen(),
-    const NotificationScreen(),
-    const ProfileScreen()
-  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _feedScreens.elementAt(selectedTab),
+      body: [
+        HomeScreen(
+          currentUserId: widget.currentUserId,
+        ),
+        SearchScreen(
+          currentUserId: widget.currentUserId,
+        ),
+        NotificationScreen(
+          currentUserId: widget.currentUserId,
+        ),
+        ProfileScreen(
+            currentUserId: widget.currentUserId,
+            visitedUserId: widget.currentUserId)
+      ].elementAt(selectedTab),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.white,
         onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const CreateZopScreen()));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const CreateZipZopScreen()));
         },
         child: const Icon(
           Icons.note_add,
