@@ -1,6 +1,5 @@
-# sabia_app
-
-Rede social que reúne pensadores modernos
+## Rede social que reúne pensadores modernos.
+### A versão Web do app é prioridade e funciona estável.
 
 ## Getting Started
 
