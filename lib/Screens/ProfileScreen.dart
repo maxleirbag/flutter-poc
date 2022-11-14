@@ -7,6 +7,7 @@ import '../Models/User.dart';
 import '../Models/ZipZop.dart';
 import '../Services/DatabaseServices.dart';
 import '../Services/auth_service.dart';
+import 'EditProfileScreen.dart';
 import 'WelcomeScreen.dart';
 // import '../Services/DatabaseServices.dart';
 
@@ -147,7 +148,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox.shrink(),
+                        const SizedBox.shrink(),
                         widget.currentUserId == widget.visitedUserId
                             ? PopupMenuButton(
                                 icon: const Icon(
@@ -158,8 +159,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 itemBuilder: (_) {
                                   return <PopupMenuItem<String>>[
                                     const PopupMenuItem(
-                                      child: Text('Logout'),
                                       value: 'logout',
+                                      child: Text('Logout'),
                                     )
                                   ];
                                 },
@@ -185,81 +186,84 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //   crossAxisAlignment: CrossAxisAlignment.end,
-                      //   children: [
-                      //     CircleAvatar(
-                      //       radius: 45,
-                      //       backgroundImage: user.profilePicture.isEmpty
-                      //           ? AssetImage('assets/zip zop.png')
-                      //           : NetworkImage(user.profilePicture),
-                      //     ),
-                      //     widget.currentUserId == widget.visitedUserId
-                      //         ? GestureDetector(
-                      //             onTap: () async {
-                      //               await Navigator.push(
-                      //                 context,
-                      //                 MaterialPageRoute(
-                      //                   builder: (context) => EditProfileScreen(
-                      //                     user: user,
-                      //                   ),
-                      //                 ),
-                      //               );
-                      //               setState(() {});
-                      //             },
-                      //             child: Container(
-                      //               width: 100,
-                      //               height: 35,
-                      //               padding:
-                      //                   EdgeInsets.symmetric(horizontal: 10),
-                      //               decoration: BoxDecoration(
-                      //                 borderRadius: BorderRadius.circular(20),
-                      //                 color: Colors.white,
-                      //                 border: Border.all(color: KzipZopColor),
-                      //               ),
-                      //               child: Center(
-                      //                 child: Text(
-                      //                   'Edit',
-                      //                   style: TextStyle(
-                      //                     fontSize: 17,
-                      //                     color: KzipZopColor,
-                      //                     fontWeight: FontWeight.bold,
-                      //                   ),
-                      //                 ),
-                      //               ),
-                      //             ),
-                      //           )
-                      //         : GestureDetector(
-                      //             onTap: followOrUnFollow,
-                      //             child: Container(
-                      //               width: 100,
-                      //               height: 35,
-                      //               padding:
-                      //                   EdgeInsets.symmetric(horizontal: 10),
-                      //               decoration: BoxDecoration(
-                      //                 borderRadius: BorderRadius.circular(20),
-                      //                 color: _isFollowing
-                      //                     ? Colors.white
-                      //                     : KzipZopColor,
-                      //                 border: Border.all(color: KzipZopColor),
-                      //               ),
-                      //               child: Center(
-                      //                 child: Text(
-                      //                   _isFollowing ? 'Following' : 'Follow',
-                      //                   style: TextStyle(
-                      //                     fontSize: 17,
-                      //                     color: _isFollowing
-                      //                         ? KzipZopColor
-                      //                         : Colors.white,
-                      //                     fontWeight: FontWeight.bold,
-                      //                   ),
-                      //                 ),
-                      //               ),
-                      //             ),
-                      //           ),
-                      //   ],
-                      // ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          CircleAvatar(
+                            radius: 45,
+                            backgroundImage: user.profilePicture.isEmpty
+                                ? AssetImage('assets/zip zop.png')
+                                    as ImageProvider
+                                : NetworkImage(
+                                    'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.ufpb.br%2Fcoremu%2Ficons%2Fredes-sociais%2Ftumblr.png%2Fimage_view_fullscreen&psig=AOvVaw2m5Q1-DjL5jWAYlZY5-rXK&ust=1668544185101000&source=images&cd=vfe&ved=0CA8QjRxqFwoTCNDL5czBrvsCFQAAAAAdAAAAABAE'),
+                            // : NetworkImage(user.profilePicture),
+                          ),
+                          widget.currentUserId == widget.visitedUserId
+                              ? GestureDetector(
+                                  onTap: () async {
+                                    await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => EditProfileScreen(
+                                          user: user,
+                                        ),
+                                      ),
+                                    );
+                                    setState(() {});
+                                  },
+                                  child: Container(
+                                    width: 100,
+                                    height: 35,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: Colors.white,
+                                      border: Border.all(color: KzipZopColor),
+                                    ),
+                                    child: const Center(
+                                      child: Text(
+                                        'Edit',
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                          color: KzipZopColor,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : GestureDetector(
+                                  onTap: followOrUnFollow,
+                                  child: Container(
+                                    width: 100,
+                                    height: 35,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: _isFollowing
+                                          ? Colors.white
+                                          : KzipZopColor,
+                                      border: Border.all(color: KzipZopColor),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        _isFollowing ? 'Following' : 'Follow',
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                          color: _isFollowing
+                                              ? KzipZopColor
+                                              : Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                        ],
+                      ),
                       const SizedBox(height: 10),
                       Text(
                         user.name,
