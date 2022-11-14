@@ -27,14 +27,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
   int _followingCount = 0;
   bool _isFollowing = false;
   int _profileSegmentedValue = 0;
-  List<ZipZop> _allTweets = [];
-  List<ZipZop> _mediaTweets = [];
+  List<ZipZop> _allZipZops = [];
+  List<ZipZop> _mediaZipZops = [];
 
   final Map<int, Widget> _profileTabs = <int, Widget>{
     0: const Padding(
       padding: EdgeInsets.symmetric(vertical: 10),
       child: Text(
-        'Tweets',
+        'ZipZops',
         style: TextStyle(
           fontSize: 13,
           fontWeight: FontWeight.w700,
@@ -85,12 +85,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
         return ListView.builder(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
-            itemCount: _allTweets.length,
+            itemCount: _allZipZops.length,
             itemBuilder: (context, index) {
               return ZipZopContainer(
                 currentUserId: widget.currentUserId,
                 author: author,
-                zipZop: _allTweets[index],
+                zipZop: _allZipZops[index],
               );
             });
         break;
@@ -98,12 +98,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
         return ListView.builder(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
-            itemCount: _mediaTweets.length,
+            itemCount: _mediaZipZops.length,
             itemBuilder: (context, index) {
               return ZipZopContainer(
                 currentUserId: widget.currentUserId,
                 author: author,
-                zipZop: _mediaTweets[index],
+                zipZop: _mediaZipZops[index],
               );
             });
       default:
