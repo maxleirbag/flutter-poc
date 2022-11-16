@@ -4,7 +4,7 @@ class ZipZop {
   String id;
   String authorId;
   String text;
-  String image;
+  // String image;
   Timestamp timestamp;
   int likes;
   int shares;
@@ -13,7 +13,7 @@ class ZipZop {
       {required this.id,
       required this.authorId,
       required this.text,
-      required this.image,
+      // required this.image,
       required this.timestamp,
       required this.likes,
       required this.shares});
@@ -23,7 +23,7 @@ class ZipZop {
         id: doc.id,
         authorId: doc['authorId'],
         text: doc['text'],
-        image: doc['image'],
+        // image: doc['image'],
         timestamp: doc['timestamp'],
         likes: doc['likes'],
         shares: doc['shares']);
