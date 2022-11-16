@@ -40,7 +40,9 @@ class _FeedScreenState extends State<FeedScreen> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => const CreateZipZopScreen()));
+                  builder: (context) => CreateZipZopScreen(
+                        currentUserId: widget.currentUserId,
+                      )));
         },
         child: const Icon(
           Icons.note_add,

@@ -27,7 +27,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   int _followingCount = 0;
   bool _isFollowing = false;
   int _profileSegmentedValue = 0;
-  List<ZipZop> _allZipZops = [];
+  List<dynamic> _allZipZops = [];
   List<ZipZop> _mediaZipZops = [];
 
   final Map<int, Widget> _profileTabs = <int, Widget>{
@@ -54,6 +54,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     ),
   };
+
+  getAllZipZops() async {
+    List userZipZops =
+        await DatabaseServices.getUserZipZops(widget.visitedUserId);
+    if (mounted) {
+      setState(() {
+        _allZipZops = userZipZops;
+      });
+    }
+  }
 
   followOrUnFollow() {
     if (_isFollowing) {
@@ -100,6 +110,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   // }
 
   Widget buildProfileWidgets(UserModel author) {
+    getAllZipZops();
     switch (_profileSegmentedValue) {
       case 0:
         return ListView.builder(
@@ -111,20 +122,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 currentUserId: widget.currentUserId,
                 author: author,
                 zipZop: _allZipZops[index],
+                // currentUserId: 'qzLBDsPaTGcrLK7Cr3cQAv01OAj2',
+                // author: author,
+                // zipZop: _allZipZops[0],
               );
             });
-      case 1:
-        return ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: _mediaZipZops.length,
-            itemBuilder: (context, index) {
-              return ZipZopContainer(
-                currentUserId: widget.currentUserId,
-                author: author,
-                zipZop: _mediaZipZops[index],
-              );
-            });
+      // case 1:
+      //   return ListView.builder(
+      //       shrinkWrap: true,
+      //       physics: const NeverScrollableScrollPhysics(),
+      //       itemCount: _mediaZipZops.length,
+      //       itemBuilder: (context, index) {
+      //         return ZipZopContainer(
+      //           currentUserId: widget.currentUserId,
+      //           author: author,
+      //           zipZop: _mediaZipZops[index],
+      //         );
+      //       });
       default:
         return const Center(
           child: Text('Profile view deu errado'),
@@ -186,6 +200,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ];
                                 },
                                 onSelected: (selectedItem) {
+                                  // Drawer, futuramente
                                   if (selectedItem == 'logout') {
                                     AuthService.logout();
                                     Navigator.pushReplacement(
@@ -211,11 +226,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          CircleAvatar(
+                          const CircleAvatar(
                             radius: 45,
                             backgroundImage:
                                 // const AssetImage('assets/zip zop.png'),
-                                const NetworkImage(
+                                NetworkImage(
                                     'https://thispersondoesnotexist.com/image'),
                             // backgroundImage: user.profilePicture.isEmpty
                             //     ? const AssetImage('assets/zip zop.png')
@@ -340,7 +355,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             });
                           },
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),

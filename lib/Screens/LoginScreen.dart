@@ -43,7 +43,8 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             TextField(
               obscureText: true,
-              decoration: InputDecoration(hintText: 'Enter your password'),
+              decoration:
+                  const InputDecoration(hintText: 'Enter your password'),
               onChanged: (value) {
                 _password = value;
               },
@@ -56,6 +57,8 @@ class _LoginScreenState extends State<LoginScreen> {
               onBtnPressed: () async {
                 bool isValid = await AuthService.signIn(_email, _password);
                 if (isValid) {
+                  // buscar ID usuário por e-mail
+                  // Navigator.push() => FeedScreen(idUsuario)
                   print('Entrou');
                   Navigator.pop(context);
                 } else {
