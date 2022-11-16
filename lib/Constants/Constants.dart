@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-const Color KzipZopColor = Colors.red;
+const Color KzipZopColor = Colors.lightGreen;
 
 final _firestore = FirebaseFirestore.instance;
 

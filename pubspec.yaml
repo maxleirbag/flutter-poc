@@ -39,6 +39,11 @@ dependencies:
   firebase_core: ^2.2.0
   cloud_firestore: ^4.0.5
   firebase_auth: ^4.1.2
+  image_picker:
+  firebase_storage:
+  flutter_image_compress:
+  path_provider:
+  uuid:
 
 dev_dependencies:
   flutter_test:
@@ -63,6 +68,7 @@ flutter:
   uses-material-design: true
   assets:
     - zip zop.png
+    - tumblr cover.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

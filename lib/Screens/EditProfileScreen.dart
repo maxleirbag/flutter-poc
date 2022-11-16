@@ -1,12 +1,15 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:sabia_app/Models/User.dart';
+import 'package:sabia_app/Constants/Constants.dart';
+import 'package:sabia_app/Models/UserModel.dart';
+import 'package:sabia_app/Services/DatabaseServices.dart';
+// import ;
 
 import 'FeedScreen.dart';
 
 class EditProfileScreen extends StatefulWidget {
-  final User user;
+  final UserModel user;
 
   const EditProfileScreen({super.key, required this.user});
 
@@ -15,83 +18,117 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-  late String _name;
-  late String _bio;
-  late File? _profileImage;
-  late File? _coverImage;
-  late String _imagePickedType;
+  late String _name = '';
+  late String _bio = '';
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
 
-  displayCoverImage() {
-    if (_coverImage == null) {
-      if (widget.user.coverImage.isNotEmpty) {
-        return NetworkImage(widget.user.coverImage);
-      } else {
-        return FileImage(_coverImage!);
-      }
-    }
-  }
-
-  displayProfielImage() {
-    if (_profileImage == null) {
-      if (widget.user.profilePicture.isNotEmpty) {
-        return NetworkImage(widget.user.profilePicture);
-      } else {
-        return const AssetImage('assets/zip zop');
-      }
-    } else {
-      return FileImage(_profileImage!);
-    }
-  }
-
-  saveProfiel() async {
+  saveProfile() async {
     _formKey.currentState!.save();
     if (_formKey.currentState!.validate() && !_isLoading) {
       setState(() {
         _isLoading = true;
       });
-      String profilePictureUrl = '';
-      String coverPictureUrl = '';
-      if (_profileImage == null) {
-        profilePictureUrl = widget.user.profilePicture;
-      } else {
-        // profilePictureUrl = await StorageService.uploadProfilePicture(widget.user.profilePicture, _profileImage);
-      }
-      if (_coverImage == null) {
-        coverPictureUrl = widget.user.coverImage;
-      } else {
-        // coverPictureUrl = await StorageService.uploadCoverPicture(widget.user.coverImage, _coverImage);
-      }
+    }
+    // consertar o Model de usuário para não usar mais imagens diferentes
+    UserModel user = UserModel(
+        id: widget.user.id,
+        name: _name,
+        bio: _bio,
+        email: widget.user.email,
+        profilePicture: widget.user.profilePicture,
+        coverImage: widget.user.profilePicture);
 
-      User user = User(
-          id: widget.user.id,
-          name: _name,
-          profilePicture: profilePictureUrl,
-          bio: _bio,
-          coverImage: coverPictureUrl,
-          email: widget.user.email);
+    DatabaseServices.updateUserData(user);
+    Navigator.pop(context);
+
+    @override
+    void initState() {
+      super.initState();
+      _name = widget.user.name;
+      _bio = widget.user.bio;
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+      body: ListView(
+        physics: const BouncingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics()),
         children: [
-          const Text('tela de edição de perfil'),
-          FloatingActionButton(
-            backgroundColor: Colors.white,
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          FeedScreen(currentUserId: widget.user.id)));
-            },
-            child: const Icon(
-              Icons.arrow_left,
-              color: Colors.green,
+          Container(
+            transform: Matrix4.translationValues(0, -40, 0),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    GestureDetector(
+                      onTap: saveProfile,
+                      child: Container(
+                        width: 100,
+                        height: 300,
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: KzipZopColor,
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'Save',
+                            style: TextStyle(
+                              fontSize: 17,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 30),
+                        TextFormField(
+                          initialValue: _name,
+                          decoration: const InputDecoration(
+                            labelText: 'Name',
+                            labelStyle: TextStyle(color: KzipZopColor),
+                          ),
+                          validator: (input) => input!.trim().length < 2
+                              ? 'please enter valid name'
+                              : null,
+                          onSaved: (value) {
+                            _name = value!;
+                          },
+                        ),
+                        const SizedBox(height: 30),
+                        TextFormField(
+                          initialValue: _bio,
+                          decoration: const InputDecoration(
+                            labelText: 'Bio',
+                            labelStyle: TextStyle(color: KzipZopColor),
+                          ),
+                          onSaved: (value) {
+                            _bio = value!;
+                          },
+                        ),
+                        const SizedBox(height: 30),
+                        _isLoading
+                            ? const CircularProgressIndicator(
+                                valueColor:
+                                    AlwaysStoppedAnimation(KzipZopColor),
+                              )
+                            : const SizedBox.shrink()
+                      ],
+                    )),
+              ],
             ),
           )
         ],

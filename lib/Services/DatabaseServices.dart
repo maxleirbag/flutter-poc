@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sabia_app/Constants/Constants.dart';
+import '../Models/UserModel.dart';
 
 class DatabaseServices {
   late bool _isFollowing;
@@ -47,5 +48,9 @@ class DatabaseServices {
         doc.reference.delete();
       }
     });
+  }
+
+  static void updateUserData(UserModel user) {
+    usersRef.doc(user.id).update({'name': user.name, 'bio': user.bio});
   }
 }

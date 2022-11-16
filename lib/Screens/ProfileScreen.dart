@@ -3,13 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:sabia_app/Constants/Constants.dart';
 import 'package:sabia_app/Widgets/ZipZopContainer.dart';
 
-import '../Models/User.dart';
+import '../Models/UserModel.dart';
 import '../Models/ZipZop.dart';
 import '../Services/DatabaseServices.dart';
 import '../Services/auth_service.dart';
 import 'EditProfileScreen.dart';
 import 'WelcomeScreen.dart';
-// import '../Services/DatabaseServices.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String currentUserId;
@@ -80,7 +79,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 
-  Widget buildProfileWidgets(User author) {
+  getFollowersCount() async {
+    int followersCount =
+        await DatabaseServices.followersNum(widget.visitedUserId);
+    if (mounted) {
+      setState(() {
+        _followersCount = followersCount;
+      });
+    }
+  }
+
+  // getFollowingCount() async {
+  //   int followingCount =
+  //       await DatabaseServices.followingNum(widget.visitedUserId);
+  //   if (mounted) {
+  //     setState(() {
+  //       _followingCount = followingCount;
+  //     });
+  //   }
+  // }
+
+  Widget buildProfileWidgets(UserModel author) {
     switch (_profileSegmentedValue) {
       case 0:
         return ListView.builder(
@@ -116,7 +135,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.purple,
+        backgroundColor: Colors.white,
         body: FutureBuilder(
           future: usersRef.doc(widget.visitedUserId).get(),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -125,7 +144,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation(Colors.red)));
             }
-            User user = User.fromDoc(snapshot.data);
+            UserModel user = UserModel.fromDoc(snapshot.data);
             return ListView(
               physics: const BouncingScrollPhysics(
                   parent: AlwaysScrollableScrollPhysics()),
@@ -136,9 +155,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     color: KzipZopColor,
                     image: user.coverImage.isEmpty
                         ? null
-                        : DecorationImage(
+                        : const DecorationImage(
                             fit: BoxFit.cover,
-                            image: NetworkImage(user.coverImage),
+                            // image: NetworkImage(user.coverImage),
+
+                            image: AssetImage('assets/tumblr cover.png'),
                           ),
                   ),
                   child: Padding(
@@ -192,11 +213,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         children: [
                           CircleAvatar(
                             radius: 45,
-                            backgroundImage: user.profilePicture.isEmpty
-                                ? AssetImage('assets/zip zop.png')
-                                    as ImageProvider
-                                : NetworkImage(
-                                    'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.ufpb.br%2Fcoremu%2Ficons%2Fredes-sociais%2Ftumblr.png%2Fimage_view_fullscreen&psig=AOvVaw2m5Q1-DjL5jWAYlZY5-rXK&ust=1668544185101000&source=images&cd=vfe&ved=0CA8QjRxqFwoTCNDL5czBrvsCFQAAAAAdAAAAABAE'),
+                            backgroundImage:
+                                // const AssetImage('assets/zip zop.png'),
+                                const NetworkImage(
+                                    'https://thispersondoesnotexist.com/image'),
+                            // backgroundImage: user.profilePicture.isEmpty
+                            //     ? const AssetImage('assets/zip zop.png')
+                            //         as ImageProvider
+                            //     : const NetworkImage(
+                            //         'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.ufpb.br%2Fcoremu%2Ficons%2Fredes-sociais%2Ftumblr.png%2Fimage_view_fullscreen&psig=AOvVaw2m5Q1-DjL5jWAYlZY5-rXK&ust=1668544185101000&source=images&cd=vfe&ved=0CA8QjRxqFwoTCNDL5czBrvsCFQAAAAAdAAAAABAE'),
                             // : NetworkImage(user.profilePicture),
                           ),
                           widget.currentUserId == widget.visitedUserId
