@@ -12,5 +12,5 @@ final followersRef = _firestore.collection('followers');
 final followingRef = _firestore.collection('following');
 final zipZopsRef = _firestore.collection('zipzops');
 final feedRefs = _firestore.collection('feeds');
-final likesRefs = _firestore.collection('likes');
-final activitiesRefs = _firestore.collection('activities');
+final likesRef = _firestore.collection('likes');
+final activitiesRef = _firestore.collection('activities');

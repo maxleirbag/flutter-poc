@@ -1,12 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:sabia_app/Constants/Constants.dart';
 import 'package:sabia_app/Models/UserModel.dart';
 import 'package:sabia_app/Services/DatabaseServices.dart';
-// import ;
-
-import 'FeedScreen.dart';
 
 class EditProfileScreen extends StatefulWidget {
   final UserModel user;
@@ -97,9 +92,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         const SizedBox(height: 30),
                         TextFormField(
                           initialValue: _name,
-                          decoration: const InputDecoration(
-                            labelText: 'Name',
-                            labelStyle: TextStyle(color: KzipZopColor),
+                          decoration: InputDecoration(
+                            labelText: _name,
+                            labelStyle: const TextStyle(color: KzipZopColor),
                           ),
                           validator: (input) => input!.trim().length < 2
                               ? 'please enter valid name'

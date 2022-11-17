@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../Models/UserModel.dart';
 import '../Models/ZipZop.dart';
+import '../Services/DatabaseServices.dart';
 
 class ZipZopContainer extends StatefulWidget {
   final ZipZop zipZop;
@@ -22,29 +23,29 @@ class _ZipZopContainerState extends State<ZipZopContainer> {
   bool _isLiked = false;
 
   initZipZopLikes() async {
-    // bool isLiked = await DatabaseServices.isLikeZipZop(
-    //     widget.currentUserId, widget.zipZop);
-    // if (mounted) {
-    //   setState(() {
-    //     _isLiked = isLiked;
-    //   });
-    // }
+    bool isLiked = await DatabaseServices.isLikeZipZop(
+        widget.currentUserId, widget.zipZop);
+    if (mounted) {
+      setState(() {
+        _isLiked = isLiked;
+      });
+    }
   }
 
   likeZipZop() {
-    // if (_isLiked) {
-    //   DatabaseServices.unlikeZipZop(widget.currentUserId, widget.zipZop);
-    //   setState(() {
-    //     _isLiked = false;
-    //     _likesCount--;
-    //   });
-    // } else {
-    //   DatabaseServices.likeZipZop(widget.currentUserId, widget.zipZop);
-    //   setState(() {
-    //     _isLiked = true;
-    //     _likesCount++;
-    //   });
-    // }
+    if (_isLiked) {
+      DatabaseServices.unlikeZipZop(widget.currentUserId, widget.zipZop);
+      setState(() {
+        _isLiked = false;
+        _likesCount--;
+      });
+    } else {
+      DatabaseServices.likeZipZop(widget.currentUserId, widget.zipZop);
+      setState(() {
+        _isLiked = true;
+        _likesCount++;
+      });
+    }
   }
 
   @override
@@ -65,30 +66,32 @@ class _ZipZopContainerState extends State<ZipZopContainer> {
             children: [
               CircleAvatar(
                 radius: 20,
-                backgroundImage: NetworkImage(widget.author.profilePicture),
+                backgroundImage:
+                    NetworkImage('https://thispersondoesnotexist.com/image'),
+                // backgroundImage: NetworkImage(widget.author.profilePicture),
                 //   backgroundImage: widget.author.profilePicture.isEmpty
                 //       ? AssetImage('assets/placeholder.png')
                 //       : NetworkImage(widget.author.profilePicture),
               ),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               Text(
                 widget.author.name,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ],
           ),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
           Text(
             widget.zipZop.text,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 15,
             ),
           ),
           // widget.zipZop.image.isEmpty ?
-          SizedBox.shrink()
+          const SizedBox.shrink()
           // : Column(
           //     children: [
           //       SizedBox(height: 15),
@@ -105,7 +108,7 @@ class _ZipZopContainerState extends State<ZipZopContainer> {
           //     ],
           //   ),
           ,
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -119,18 +122,18 @@ class _ZipZopContainerState extends State<ZipZopContainer> {
                     onPressed: likeZipZop,
                   ),
                   Text(
-                    _likesCount.toString() + ' Likes',
+                    '$_likesCount Likes',
                   ),
                 ],
               ),
               Text(
                 widget.zipZop.timestamp.toDate().toString().substring(0, 19),
-                style: TextStyle(color: Colors.grey),
+                style: const TextStyle(color: Colors.grey),
               )
             ],
           ),
-          SizedBox(height: 10),
-          Divider()
+          const SizedBox(height: 10),
+          const Divider()
         ],
       ),
     );
