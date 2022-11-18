@@ -1,15 +1,34 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sabia_app/Constants/Constants.dart';
 import 'package:sabia_app/Models/ZipZop.dart';
+import '../Models/Activity.dart';
 import '../Models/UserModel.dart';
 
 class DatabaseServices {
   late bool _isFollowing;
 
+  static Future<QuerySnapshot>? searchUsers(String name) async {
+    Future<QuerySnapshot> users = usersRef
+        .where('name', isGreaterThanOrEqualTo: name)
+        .where('name', isLessThan: '${name}z')
+        .get();
+    return users;
+  }
+
+  static void updateUserData(UserModel user) {
+    usersRef.doc(user.id).update({'name': user.name, 'bio': user.bio});
+  }
+
   static Future<int> followersNum(String userId) async {
     QuerySnapshot followersSnapshot =
         await followersRef.doc(userId).collection('Followers').get();
     return followersSnapshot.docs.length;
+  }
+
+  static Future<int> followingNum(String visitedUserId) async {
+    QuerySnapshot followingSnapshot =
+        await followingRef.doc(visitedUserId).collection('Following').get();
+    return followingSnapshot.docs.length;
   }
 
   static void followUser(String currentUserId, String visitedUserId) {
@@ -24,7 +43,7 @@ class DatabaseServices {
         .doc(currentUserId)
         .set({});
 
-    // addActivity(currentUserId, null, true, visitedUserId);
+    addActivity(currentUserId, null, true, visitedUserId);
   }
 
   static void unFollowUser(String currentUserId, String visitedUserId) {
@@ -51,8 +70,14 @@ class DatabaseServices {
     });
   }
 
-  static void updateUserData(UserModel user) {
-    usersRef.doc(user.id).update({'name': user.name, 'bio': user.bio});
+  static Future<bool> isFollowingUser(
+      String currentUserId, String visitedUserId) async {
+    DocumentSnapshot followingDoc = await followersRef
+        .doc(visitedUserId)
+        .collection('Followers')
+        .doc(currentUserId)
+        .get();
+    return followingDoc.exists;
   }
 
   static void createZipZop(ZipZop zipZop) {
@@ -112,32 +137,23 @@ class DatabaseServices {
       zipZopDocProfile.update({'likes': likes + 1});
     });
 
-    //   DocumentReference zipZopDocFeed =
-    //       feedRefs.doc(currentUserId).collection('userFeed').doc(zipZop.id);
-    //   zipZopDocFeed.get().then((doc) {
-    //     if (doc.exists) {
-    //       int likes = doc.data()['likes'];
-    //       zipZopDocFeed.update({'likes': likes + 1});
-    //     }
-    //   });
-    //
+    DocumentReference zipZopDocFeed =
+        feedRefs.doc(currentUserId).collection('userFeed').doc(zipZop.id);
+    zipZopDocFeed.get().then((doc) {
+      if (doc.exists) {
+        final docData = doc.data() as Map<dynamic, dynamic>;
+        int likes = docData['likes'];
+        zipZopDocFeed.update({'likes': likes + 1});
+      }
+    });
+
     likesRef
         .doc(zipZop.id)
         .collection('zipZopLikes')
         .doc(currentUserId)
         .set({});
-    //
-    //   addActivity(currentUserId, zipZop, false, null);
-  }
 
-  static Future<bool> isLikeZipZop(String currentUserId, ZipZop zipZop) async {
-    DocumentSnapshot userDoc = await likesRef
-        .doc(zipZop.id)
-        .collection('zipZopLikes')
-        .doc(currentUserId)
-        .get();
-
-    return userDoc.exists;
+    addActivity(currentUserId, zipZop, false, null);
   }
 
   static void unlikeZipZop(String currentUserId, ZipZop zipZop) {
@@ -167,5 +183,42 @@ class DatabaseServices {
         .doc(currentUserId)
         .get()
         .then((doc) => doc.reference.delete());
+  }
+
+  static Future<bool> isLikeZipZop(String currentUserId, ZipZop zipZop) async {
+    DocumentSnapshot userDoc = await likesRef
+        .doc(zipZop.id)
+        .collection('zipZopLikes')
+        .doc(currentUserId)
+        .get();
+
+    return userDoc.exists;
+  }
+
+  static void addActivity(String currentUserId, ZipZop? zipZop, bool follow,
+      String? followedUserId) {
+    if (follow) {
+      activitiesRef.doc(followedUserId).collection('userActivities').add({
+        'fromUserId': currentUserId,
+        'timestamp': Timestamp.fromDate(DateTime.now())
+      });
+    } else {
+      activitiesRef.doc(zipZop!.authorId).collection('userActivities').add({
+        'fromUserId': currentUserId,
+        'timestamp': Timestamp.fromDate(DateTime.now()),
+        'follow': false,
+      });
+    }
+  }
+
+  static Future<List<Activity>> getActivities(String userId) async {
+    QuerySnapshot userActiviesSnapshot = await activitiesRef
+        .doc(userId)
+        .collection('userActivities')
+        .orderBy('timestamp', descending: true)
+        .get();
+    List<Activity> activities =
+        userActiviesSnapshot.docs.map((doc) => Activity.fromDoc(doc)).toList();
+    return activities;
   }
 }
