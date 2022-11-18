@@ -44,43 +44,33 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   getMatchedUsers() {
-    print(inputText);
     if (inputText.isNotEmpty) {
+      var values = DatabaseServices.searchUsers(inputText);
       setState(() {
-        _users = DatabaseServices.searchUsers(inputText);
+        _users = values;
+        inputText = '';
       });
     }
-    // if (input.toString().isNotEmpty) print(input);
-    // if (_isLiked) {
-    //   DatabaseServices.unlikeZipZop(widget.currentUserId, widget.zipZop);
-    //   setState(() {
-    //     _isLiked = false;
-    //     _likesCount--;
-    //   });
-    // } else {
-    //   DatabaseServices.likeZipZop(widget.currentUserId, widget.zipZop);
-    //   setState(() {
-    //     _isLiked = true;
-    //     _likesCount++;
-    //   });
-    // }
-    print(_users);
-    inputText = '';
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          actions: [
-            IconButton(
-                onPressed: () {
-                  print('ok $inputText');
-                  getMatchedUsers();
-                  _searchController.clear();
-                },
-                icon: const Icon(Icons.search))
-          ],
+          leading: IconButton(
+              onPressed: () {
+                getMatchedUsers();
+                _searchController.clear();
+              },
+              icon: const Icon(Icons.search)),
+          // actions: [
+          //   IconButton(
+          //       onPressed: () {
+          //         getMatchedUsers();
+          //         _searchController.clear();
+          //       },
+          //       icon: const Icon(Icons.search))
+          // ],
           centerTitle: true,
           elevation: 0.5,
           title: TextField(
@@ -103,7 +93,7 @@ class _SearchScreenState extends State<SearchScreen> {
             ? Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+                  children: const [
                     Icon(Icons.search, size: 200),
                     Text(
                       'Buscar perfil do Sabiá App...',
@@ -115,24 +105,27 @@ class _SearchScreenState extends State<SearchScreen> {
               )
             // : Container(),
             : FutureBuilder(
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                if (!snapshot.hasData) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                if (snapshot.data.documents.length == 0) {
-                  return Center(
-                    child: Text('Nenhum usuário encontrado com esse nome!'),
-                  );
-                }
-                return ListView.builder(
-                    itemCount: snapshot.data.documents.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      UserModel user =
-                          UserModel.fromDoc(snapshot.data.documents[index]);
-                      return buildUserTile(user);
-                    });
-              }));
+                future: _users,
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (!snapshot.hasData) {
+                    return const Center(
+                      // child: CircularProgressIndicator(),
+                      child: Text('Não tem snapshot data'),
+                    );
+                  }
+                  if (snapshot.data!.docs.isEmpty) {
+                    return const Center(
+                      child: Text('Nenhum usuário encontrado com esse nome!'),
+                    );
+                  }
+                  return ListView.builder(
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        UserModel user =
+                            UserModel.fromDoc(snapshot.data!.docs[index]);
+                        return buildUserTile(user);
+                      });
+                }));
   }
 }

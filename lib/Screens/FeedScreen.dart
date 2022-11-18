@@ -1,15 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../Services/auth_service.dart';
 import 'CreateZipZopScreen.dart';
 import 'HomeScreen.dart';
-import 'NotificationScreen.dart';
+import 'NotificationsScreen.dart';
 import 'ProfileScreen.dart';
 import 'SearchScreen.dart';
+import 'WelcomeScreen.dart';
 
 class FeedScreen extends StatefulWidget {
   final String currentUserId;
-  const FeedScreen({Key? key, required this.currentUserId}) : super(key: key);
+
+  const FeedScreen({super.key, required this.currentUserId});
 
   @override
   State<FeedScreen> createState() => _FeedScreenState();
@@ -20,6 +23,7 @@ class _FeedScreenState extends State<FeedScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: const Text('coisa')), // customizar
       body: [
         HomeScreen(
           currentUserId: widget.currentUserId,
@@ -27,7 +31,7 @@ class _FeedScreenState extends State<FeedScreen> {
         SearchScreen(
           currentUserId: widget.currentUserId,
         ),
-        NotificationScreen(
+        NotificationsScreen(
           currentUserId: widget.currentUserId,
         ),
         ProfileScreen(
@@ -47,6 +51,39 @@ class _FeedScreenState extends State<FeedScreen> {
         child: const Icon(
           Icons.note_add,
           color: Colors.green,
+        ),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          // Important: Remove any padding from the ListView.
+          padding: EdgeInsets.zero,
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text('Menu'),
+            ),
+            ListTile(
+              leading: const Icon(CupertinoIcons.moon),
+              title: const Text('Dark mode'),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: const Text('Log out'),
+              onTap: () {
+                // Navigator.pop(context);
+                AuthService.logout();
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const WelcomeScreen()));
+              },
+            ),
+          ],
         ),
       ),
       bottomNavigationBar: CupertinoTabBar(
@@ -69,3 +106,4 @@ class _FeedScreenState extends State<FeedScreen> {
     );
   }
 }
+// }

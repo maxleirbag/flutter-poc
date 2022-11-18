@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sabia_app/Widgets/RoundedButton.dart';
 
 import '../Services/auth_service.dart';
+import 'FeedScreen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -55,14 +57,33 @@ class _LoginScreenState extends State<LoginScreen> {
             RoundedButton(
               btnText: 'Log In',
               onBtnPressed: () async {
-                bool isValid = await AuthService.signIn(_email, _password);
+                var result = await AuthService.signIn(_email, _password);
+                bool isValid = result[0];
+                var user = result[1];
                 if (isValid) {
-                  // buscar ID usuário por e-mail
-                  // Navigator.push() => FeedScreen(idUsuario)
-                  print('Entrou');
-                  Navigator.pop(context);
+                  Fluttertoast.showToast(
+                      msg: 'Logado como $_email',
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 3,
+                      backgroundColor: Colors.amber,
+                      textColor: Colors.white,
+                      fontSize: 15);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => FeedScreen(
+                                currentUserId: user,
+                              )));
                 } else {
-                  print('impossível logar');
+                  Fluttertoast.showToast(
+                      msg: 'Impossível logar.\nUsuário e/ou senha incorretos.',
+                      toastLength: Toast.LENGTH_LONG,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 5,
+                      backgroundColor: Colors.amber,
+                      textColor: Colors.white,
+                      fontSize: 15);
                 }
               },
             )

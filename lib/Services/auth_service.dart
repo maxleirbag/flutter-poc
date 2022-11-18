@@ -29,20 +29,26 @@ class AuthService {
     return false;
   }
 
-  static Future<bool> signIn(String email, String password) async {
+  // static Future<bool> signIn(String email, String password) async {
+  static Future<List<dynamic>> signIn(String email, String password) async {
     try {
+      print(_auth.currentUser);
       await _auth.signInWithEmailAndPassword(email: email, password: password);
-      return true;
+      print(_auth.currentUser);
+      return [true, _auth.currentUser?.uid];
     } catch (e) {
       print(e);
       print('login problem');
-      return false;
+      return [false, null];
     }
   }
 
-  static void logout() {
+  static Future<void> logout() async {
     try {
-      _auth.signOut();
+      print(_auth.currentUser);
+      await _auth.signOut();
+      print(_auth.currentUser);
+      // _auth.userChanges();
     } catch (e) {
       if (kDebugMode) {
         print(e);

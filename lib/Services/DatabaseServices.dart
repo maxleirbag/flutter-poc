@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:sabia_app/Constants/Constants.dart';
 import 'package:sabia_app/Models/ZipZop.dart';
 import '../Models/Activity.dart';
@@ -7,7 +8,7 @@ import '../Models/UserModel.dart';
 class DatabaseServices {
   late bool _isFollowing;
 
-  static Future<QuerySnapshot>? searchUsers(String name) async {
+  static Future<QuerySnapshot> searchUsers(String name) async {
     Future<QuerySnapshot> users = usersRef
         .where('name', isGreaterThanOrEqualTo: name)
         .where('name', isLessThan: '${name}z')
@@ -217,8 +218,58 @@ class DatabaseServices {
         .collection('userActivities')
         .orderBy('timestamp', descending: true)
         .get();
-    List<Activity> activities =
-        userActiviesSnapshot.docs.map((doc) => Activity.fromDoc(doc)).toList();
-    return activities;
+    // Activity coisinha = Activity(
+    //     id: 'UoyFKgQRoFIWo3b9FKxM',
+    //     fromUserId: 'qzLBDsPaTGcrLK7Cr3cQAv01OAj2',
+    //     timestamp: Timestamp.now(),
+    //     follow: false);
+    Activity agoraVai = Activity(
+        id: userActiviesSnapshot.docs[0].id,
+        fromUserId: (userActiviesSnapshot.docs[0].data()! as Map)['fromUserId'],
+        timestamp: (userActiviesSnapshot.docs[0].data()! as Map)['timestamp'],
+        follow: (userActiviesSnapshot.docs[0].data()! as Map)['follow']);
+
+    List<Activity> coisa = [];
+    coisa.add(agoraVai);
+    return coisa;
+    // print([
+    //   // userActiviesSnapshot.docs,
+    //   // userActiviesSnapshot.docs[0].data(),
+    //   (userActiviesSnapshot.docs[0].data()! as Map)['fromUserId'],
+    //   userActiviesSnapshot.docs.length,
+    //   // Activity.fromDoc(userActiviesSnapshot.docs[0])
+    // ]);
+
+    // List<Activity> activities = userActiviesSnapshot.docs.map((doc) {
+    //   print([doc.id, doc.data()]);
+    //   // Activity nova = Activity(fromUserId: doc.data.fromUserId.toString(), timestamp: timestamp, follow: follow)
+    //   // doc.
+    //   return Activity.fromDoc(doc);
+    // }).toList();
+    // return activities;
+
+    // List<Activity> coisa = [];
+    // for (var doc in userActiviesSnapshot.docs) {
+    //
+    //   // (doc.data()! as Map)['follow'].toString().toLowerCase() as bool);
+    //
+    //   Activity detailed = Activity(
+    //       id: doc.id,
+    //       fromUserId: (doc.data()! as Map)['fromUserId'].toString(),
+    //       timestamp: (doc.data()! as Map)['timestamp'] as Timestamp,
+    //       follow: true);
+    //   // (doc.data()! as Map)['follow'].toString().toLowerCase() as bool);
+    //   coisa.add(detailed);
+    // }
+    // return coisa;
+    // //   Iterable<Activity> activities = userActiviesSnapshot.docs.map((doc) {
+    // //     Activity detailed = Activity(
+    // //         id: doc.id,
+    // //         fromUserId: (doc.data()! as Map)['fromUserId'],
+    // //         timestamp: (doc.data()! as Map)['timestamp'],
+    // //         follow: (doc.data()! as Map)['follow']);
+    // //   }).cast<Activity>();
+    // //
+    // // return activities
   }
 }

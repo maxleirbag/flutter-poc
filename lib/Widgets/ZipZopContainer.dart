@@ -64,14 +64,10 @@ class _ZipZopContainerState extends State<ZipZopContainer> {
         children: [
           Row(
             children: [
-              CircleAvatar(
+              const CircleAvatar(
                 radius: 20,
                 backgroundImage:
                     NetworkImage('https://thispersondoesnotexist.com/image'),
-                // backgroundImage: NetworkImage(widget.author.profilePicture),
-                //   backgroundImage: widget.author.profilePicture.isEmpty
-                //       ? AssetImage('assets/placeholder.png')
-                //       : NetworkImage(widget.author.profilePicture),
               ),
               const SizedBox(width: 10),
               Text(
@@ -90,24 +86,7 @@ class _ZipZopContainerState extends State<ZipZopContainer> {
               fontSize: 15,
             ),
           ),
-          // widget.zipZop.image.isEmpty ?
-          const SizedBox.shrink()
-          // : Column(
-          //     children: [
-          //       SizedBox(height: 15),
-          //       Container(
-          //         height: 250,
-          //         decoration: BoxDecoration(
-          //             // color: KZipZoperColor,
-          //             borderRadius: BorderRadius.circular(10),
-          //             image: DecorationImage(
-          //               fit: BoxFit.cover,
-          //               image: NetworkImage(widget.zipZop.image),
-          //             )),
-          //       )
-          //     ],
-          //   ),
-          ,
+          const SizedBox.shrink(),
           const SizedBox(height: 15),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

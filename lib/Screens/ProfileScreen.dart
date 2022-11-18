@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sabia_app/Constants/Constants.dart';
+import 'package:sabia_app/Screens/FeedScreen.dart';
 import 'package:sabia_app/Widgets/ZipZopContainer.dart';
 
 import '../Models/UserModel.dart';
-import '../Models/ZipZop.dart';
 import '../Services/DatabaseServices.dart';
 import '../Services/auth_service.dart';
 import 'EditProfileScreen.dart';
@@ -28,7 +28,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool _isFollowing = false;
   int _profileSegmentedValue = 0;
   List<dynamic> _allZipZops = [];
-  List<ZipZop> _mediaZipZops = [];
+  // List<ZipZop> _mediaZipZops = [];
 
   final Map<int, Widget> _profileTabs = <int, Widget>{
     0: const Padding(
@@ -45,7 +45,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     1: const Padding(
       padding: EdgeInsets.symmetric(vertical: 10),
       child: Text(
-        'Media',
+        'Outra coisa',
         style: TextStyle(
           fontSize: 13,
           fontWeight: FontWeight.w700,
@@ -99,18 +99,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  // getFollowingCount() async {
-  //   int followingCount =
-  //       await DatabaseServices.followingNum(widget.visitedUserId);
-  //   if (mounted) {
-  //     setState(() {
-  //       _followingCount = followingCount;
-  //     });
-  //   }
-  // }
+  getFollowingCount() async {
+    int followingCount =
+        await DatabaseServices.followingNum(widget.visitedUserId);
+    if (mounted) {
+      setState(() {
+        _followingCount = followingCount;
+      });
+    }
+  }
+
+  setupIsFollowing() async {
+    bool isFollowingThisUser = await DatabaseServices.isFollowingUser(
+        widget.currentUserId, widget.visitedUserId);
+    setState(() {
+      _isFollowing = isFollowingThisUser;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getFollowersCount();
+    getFollowingCount();
+    setupIsFollowing();
+    getAllZipZops();
+  }
 
   Widget buildProfileWidgets(UserModel author) {
-    getAllZipZops();
     switch (_profileSegmentedValue) {
       case 0:
         return ListView.builder(
@@ -122,9 +138,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 currentUserId: widget.currentUserId,
                 author: author,
                 zipZop: _allZipZops[index],
-                // currentUserId: 'qzLBDsPaTGcrLK7Cr3cQAv01OAj2',
-                // author: author,
-                // zipZop: _allZipZops[0],
               );
             });
       // case 1:
@@ -149,6 +162,47 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        // appBar: AppBar(
+        //   backgroundColor: Colors.white,
+        //   elevation: 0.5,
+        //   centerTitle: true,
+        //   leading: SizedBox(
+        //     height: 40,
+        //     child: Image.asset('assets/zip zop.png'),
+        //   ),
+        //   title: const Text(
+        //     'Perfil',
+        //     style: TextStyle(
+        //       color: KzipZopColor,
+        //     ),
+        //   ),
+        //   actions: [
+        //     IconButton(
+        //         // onPressed: (context) =>
+        //         //     Navigator.push(context, FeedScreen(currentUserId: widget.user.id)),
+        //         onPressed: () {
+        //           Navigator.push(
+        //               context,
+        //               MaterialPageRoute(
+        //                   builder: (context) => FeedScreen(
+        //                         currentUserId: widget.currentUserId,
+        //                       )));
+        //         },
+        //         icon: Icon(CupertinoIcons.arrow_left))
+        //   ],
+        // ),
+        floatingActionButton: IconButton(
+            // onPressed: (context) =>
+            //     Navigator.push(context, FeedScreen(currentUserId: widget.user.id)),
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => FeedScreen(
+                            currentUserId: widget.currentUserId,
+                          )));
+            },
+            icon: Icon(CupertinoIcons.arrow_left)),
         backgroundColor: Colors.white,
         body: FutureBuilder(
           future: usersRef.doc(widget.visitedUserId).get(),
@@ -171,49 +225,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ? null
                         : const DecorationImage(
                             fit: BoxFit.cover,
-                            // image: NetworkImage(user.coverImage),
-
                             image: AssetImage('assets/tumblr cover.png'),
                           ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox.shrink(),
-                        widget.currentUserId == widget.visitedUserId
-                            ? PopupMenuButton(
-                                icon: const Icon(
-                                  Icons.more_horiz,
-                                  color: Colors.white,
-                                  size: 30,
-                                ),
-                                itemBuilder: (_) {
-                                  return <PopupMenuItem<String>>[
-                                    const PopupMenuItem(
-                                      value: 'logout',
-                                      child: Text('Logout'),
-                                    )
-                                  ];
-                                },
-                                onSelected: (selectedItem) {
-                                  // Drawer, futuramente
-                                  if (selectedItem == 'logout') {
-                                    AuthService.logout();
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const WelcomeScreen()));
-                                  }
-                                },
-                              )
-                            : const SizedBox(),
-                      ],
-                    ),
                   ),
                 ),
                 Container(
@@ -228,16 +241,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         children: [
                           const CircleAvatar(
                             radius: 45,
-                            backgroundImage:
-                                // const AssetImage('assets/zip zop.png'),
-                                NetworkImage(
-                                    'https://thispersondoesnotexist.com/image'),
-                            // backgroundImage: user.profilePicture.isEmpty
-                            //     ? const AssetImage('assets/zip zop.png')
-                            //         as ImageProvider
-                            //     : const NetworkImage(
-                            //         'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.ufpb.br%2Fcoremu%2Ficons%2Fredes-sociais%2Ftumblr.png%2Fimage_view_fullscreen&psig=AOvVaw2m5Q1-DjL5jWAYlZY5-rXK&ust=1668544185101000&source=images&cd=vfe&ved=0CA8QjRxqFwoTCNDL5czBrvsCFQAAAAAdAAAAABAE'),
-                            // : NetworkImage(user.profilePicture),
+                            backgroundImage: NetworkImage(
+                                'https://thispersondoesnotexist.com/image'),
                           ),
                           widget.currentUserId == widget.visitedUserId
                               ? GestureDetector(
@@ -277,8 +282,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               : GestureDetector(
                                   onTap: followOrUnFollow,
                                   child: Container(
-                                    width: 100,
-                                    height: 35,
+                                    width: 115,
+                                    height: 40,
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 10),
                                     decoration: BoxDecoration(

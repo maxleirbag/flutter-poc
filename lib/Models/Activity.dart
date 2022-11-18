@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Activity {
-  String id;
+  String? id;
   String fromUserId;
   Timestamp timestamp;
   bool follow;
 
   Activity(
-      {required this.id,
+      {this.id,
       required this.fromUserId,
       required this.timestamp,
       required this.follow});

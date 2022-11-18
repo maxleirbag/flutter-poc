@@ -44,6 +44,8 @@ dependencies:
   flutter_image_compress:
   path_provider:
   uuid:
+  fluttertoast: ^8.0.8
+
 
 dev_dependencies:
   flutter_test:

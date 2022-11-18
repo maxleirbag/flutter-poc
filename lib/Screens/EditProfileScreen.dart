@@ -100,7 +100,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               ? 'please enter valid name'
                               : null,
                           onSaved: (value) {
-                            _name = value!;
+                            _name = value!.toString().toLowerCase();
                           },
                         ),
                         const SizedBox(height: 30),
