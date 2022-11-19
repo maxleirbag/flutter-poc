@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../Models/UserModel.dart';
 import '../Models/ZipZop.dart';
 import '../Services/DatabaseServices.dart';
@@ -64,10 +65,10 @@ class _ZipZopContainerState extends State<ZipZopContainer> {
         children: [
           Row(
             children: [
-              const CircleAvatar(
+              CircleAvatar(
                 radius: 20,
                 backgroundImage:
-                    NetworkImage('https://thispersondoesnotexist.com/image'),
+                    Image.asset(widget.author.profilePicture).image,
               ),
               const SizedBox(width: 10),
               Text(

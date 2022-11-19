@@ -38,14 +38,12 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             return Column(
               children: [
                 ListTile(
-                  leading: const CircleAvatar(
-                    radius: 20,
-                    backgroundImage: NetworkImage(
-                        'https://thispersondoesnotexist.com/image'),
-                  ),
+                  leading: CircleAvatar(
+                      radius: 20,
+                      backgroundImage: Image.asset(user.profilePicture).image),
                   title: activity.follow == true
-                      ? Text('${user.name} follows you')
-                      : Text('${user.name} liked your tweet'),
+                      ? Text('${user.name} te segue.')
+                      : Text('${user.name} gostou do seu ZipZop.'),
                 ),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 15),

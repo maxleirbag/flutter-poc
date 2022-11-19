@@ -1,12 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
+import 'package:sabia_app/Services/DatabaseServices.dart';
 
 class AuthService {
   static final _auth = FirebaseAuth.instance;
   static final _firestore = FirebaseFirestore.instance;
 
-  static Future<bool> signUp(String name, String email, String password) async {
+  static Future<List<dynamic>> signUp(
+      String name, String email, String password) async {
     try {
       UserCredential authResult = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
@@ -15,44 +16,35 @@ class AuthService {
         _firestore.collection('users').doc(signedInUser.uid).set({
           'name': name,
           'email': email,
-          'profilePicture': '',
-          'coverImage': '',
-          'bio': ''
+          'profilePicture': DatabaseServices.randomImageProfilePicker(),
+          'coverImage': DatabaseServices.randomBackgroundImagePicker(),
+          'bio': '(Insira biografia)'
         });
-        print('Usuário registrado com sucesso');
-        return true;
+        return [true, signedInUser];
       }
-      return false;
+      return [false, null];
     } catch (e) {
-      print(e);
+      print('Falha ao cadastrar $email. \nMensagem de erro: $e');
     }
-    return false;
+    return [false, null];
   }
 
-  // static Future<bool> signIn(String email, String password) async {
   static Future<List<dynamic>> signIn(String email, String password) async {
     try {
-      print(_auth.currentUser);
       await _auth.signInWithEmailAndPassword(email: email, password: password);
-      print(_auth.currentUser);
       return [true, _auth.currentUser?.uid];
     } catch (e) {
-      print(e);
-      print('login problem');
+      print('Falha ao fazer login com $email. \nMensagem de erro: $e');
       return [false, null];
     }
   }
 
   static Future<void> logout() async {
     try {
-      print(_auth.currentUser);
       await _auth.signOut();
-      print(_auth.currentUser);
-      // _auth.userChanges();
     } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
+      print(
+          'Falha ao sair da conta ${_auth.currentUser?.email}. Mensagem de erro: $e');
     }
   }
 }

@@ -6,9 +6,7 @@ import 'package:sabia_app/Widgets/ZipZopContainer.dart';
 
 import '../Models/UserModel.dart';
 import '../Services/DatabaseServices.dart';
-import '../Services/auth_service.dart';
 import 'EditProfileScreen.dart';
-import 'WelcomeScreen.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String currentUserId;
@@ -154,7 +152,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       //       });
       default:
         return const Center(
-          child: Text('Profile view deu errado'),
+          child: Text(
+            'Profile view deu errado',
+            style: TextStyle(fontSize: 25),
+          ),
         );
     }
   }
@@ -162,38 +163,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        // appBar: AppBar(
-        //   backgroundColor: Colors.white,
-        //   elevation: 0.5,
-        //   centerTitle: true,
-        //   leading: SizedBox(
-        //     height: 40,
-        //     child: Image.asset('assets/zip zop.png'),
-        //   ),
-        //   title: const Text(
-        //     'Perfil',
-        //     style: TextStyle(
-        //       color: KzipZopColor,
-        //     ),
-        //   ),
-        //   actions: [
-        //     IconButton(
-        //         // onPressed: (context) =>
-        //         //     Navigator.push(context, FeedScreen(currentUserId: widget.user.id)),
-        //         onPressed: () {
-        //           Navigator.push(
-        //               context,
-        //               MaterialPageRoute(
-        //                   builder: (context) => FeedScreen(
-        //                         currentUserId: widget.currentUserId,
-        //                       )));
-        //         },
-        //         icon: Icon(CupertinoIcons.arrow_left))
-        //   ],
-        // ),
         floatingActionButton: IconButton(
-            // onPressed: (context) =>
-            //     Navigator.push(context, FeedScreen(currentUserId: widget.user.id)),
             onPressed: () {
               Navigator.push(
                   context,
@@ -202,7 +172,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             currentUserId: widget.currentUserId,
                           )));
             },
-            icon: Icon(CupertinoIcons.arrow_left)),
+            icon: const Icon(CupertinoIcons.arrow_left)),
         backgroundColor: Colors.white,
         body: FutureBuilder(
           future: usersRef.doc(widget.visitedUserId).get(),
@@ -223,10 +193,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     color: KzipZopColor,
                     image: user.coverImage.isEmpty
                         ? null
-                        : const DecorationImage(
+                        : DecorationImage(
                             fit: BoxFit.cover,
-                            image: AssetImage('assets/tumblr cover.png'),
-                          ),
+                            // image: AssetImage('assets/tumblr cover.png')
+                            image: Image.asset(user.coverImage).image),
                   ),
                 ),
                 Container(
@@ -239,10 +209,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          const CircleAvatar(
+                          CircleAvatar(
                             radius: 45,
-                            backgroundImage: NetworkImage(
-                                'https://thispersondoesnotexist.com/image'),
+                            backgroundImage:
+                                Image.asset(user.profilePicture).image,
                           ),
                           widget.currentUserId == widget.visitedUserId
                               ? GestureDetector(

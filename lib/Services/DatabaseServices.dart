@@ -1,14 +1,16 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:sabia_app/Constants/Constants.dart';
 import 'package:sabia_app/Models/ZipZop.dart';
+
 import '../Models/Activity.dart';
 import '../Models/UserModel.dart';
 
 class DatabaseServices {
   late bool _isFollowing;
 
-  static Future<QuerySnapshot> searchUsers(String name) async {
+  static Future<QuerySnapshot> getUsersByName(String name) async {
     Future<QuerySnapshot> users = usersRef
         .where('name', isGreaterThanOrEqualTo: name)
         .where('name', isLessThan: '${name}z')
@@ -16,8 +18,23 @@ class DatabaseServices {
     return users;
   }
 
-  static void updateUserData(UserModel user) {
-    usersRef.doc(user.id).update({'name': user.name, 'bio': user.bio});
+  static Future<QuerySnapshot> getUsersByEmail(String email) async {
+    Future<QuerySnapshot> users = usersRef
+        .where('email', isGreaterThanOrEqualTo: email)
+        .where('email', isLessThan: '${email}z')
+        .get();
+    return users;
+  }
+
+  static bool updateUserData(UserModel user) {
+    if (user.name.isNotEmpty && user.bio.isNotEmpty) {
+      usersRef.doc(user.id).update({
+        'name': user.name,
+        'bio': user.bio,
+      });
+      return true;
+    }
+    return false;
   }
 
   static Future<int> followersNum(String userId) async {
@@ -90,9 +107,9 @@ class DatabaseServices {
       'likes': zipZop.likes,
       'shares': zipZop.shares,
     }).then((doc) async {
-      QuerySnapshot followersSnapshot =
-          await followersRef.doc(zipZop.authorId).collection('followers').get();
-      for (var docSnapshot in followersSnapshot.docs) {
+      QuerySnapshot followerSnapshot =
+          await followersRef.doc(zipZop.authorId).collection('Followers').get();
+      for (var docSnapshot in followerSnapshot.docs) {
         feedRefs.doc(docSnapshot.id).collection('userFeed').doc(doc.id).set({
           'text': zipZop.text,
           'authorId': zipZop.authorId,
@@ -271,5 +288,45 @@ class DatabaseServices {
     // //   }).cast<Activity>();
     // //
     // // return activities
+  }
+
+  static String randomImageProfilePicker() {
+    String prefixo = 'assets/';
+    String sufixo = '.jpeg';
+
+    List<String> fotosDisponiveis = [
+      'firstBotImage',
+      'secondBotImage',
+      'thirdBotImage',
+      'fourthBotImage',
+      'fifthBotImage',
+      'sixthBotImage',
+    ];
+    Random rng = Random();
+    int numAleatorio = rng.nextInt(fotosDisponiveis.length - 1);
+    String sorteada = fotosDisponiveis[numAleatorio];
+    String selecionada = '$prefixo$sorteada$sufixo';
+
+    return selecionada;
+  }
+
+  static String randomBackgroundImagePicker() {
+    String prefixo = 'assets/';
+    String sufixo = '.png';
+
+    List<String> capasDisponiveis = [
+      'firstBg',
+      'secondBg',
+      'thirdBg',
+      'fourthBg',
+      'fifthBg',
+      'sixthBg',
+    ];
+    Random rng = Random();
+    int numAleatorio = rng.nextInt(capasDisponiveis.length - 1);
+    String sorteada = capasDisponiveis[numAleatorio];
+    String selecionada = '$prefixo$sorteada$sufixo';
+
+    return selecionada;
   }
 }

@@ -27,6 +27,7 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 apply plugin: 'com.google.gms.google-services'
 
 android {
+//    compileSdkVersion localProperties.getProperty('flutter.compileSdkVersion').toInteger()
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
@@ -45,7 +46,9 @@ android {
 //        targetSdkVersion 33
 //        versionCode 1
 //        versionName "1.0"
-        targetSdkVersion flutter.targetSdkVersion
+
+        minSdkVersion flutter.minSdkVersion //localProperties.getProperty('flutter.minSdkVersion').toInteger()
+//        targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }

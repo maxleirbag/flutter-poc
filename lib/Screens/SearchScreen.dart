@@ -20,10 +20,9 @@ class _SearchScreenState extends State<SearchScreen> {
 
   buildUserTile(UserModel user) {
     return ListTile(
-      leading: const CircleAvatar(
+      leading: CircleAvatar(
         radius: 20,
-        backgroundImage:
-            NetworkImage('https://thispersondoesnotexist.com/image'),
+        backgroundImage: Image.asset(user.profilePicture).image,
       ),
       title: Text(user.name),
       onTap: () {
@@ -45,7 +44,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   getMatchedUsers() {
     if (inputText.isNotEmpty) {
-      var values = DatabaseServices.searchUsers(inputText);
+      var values = DatabaseServices.getUsersByName(inputText);
       setState(() {
         _users = values;
         inputText = '';
@@ -56,6 +55,8 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        // TODO remover campo de busca da AppBar
+        // Container com campos de Nome + Email
         appBar: AppBar(
           leading: IconButton(
               onPressed: () {
@@ -63,14 +64,6 @@ class _SearchScreenState extends State<SearchScreen> {
                 _searchController.clear();
               },
               icon: const Icon(Icons.search)),
-          // actions: [
-          //   IconButton(
-          //       onPressed: () {
-          //         getMatchedUsers();
-          //         _searchController.clear();
-          //       },
-          //       icon: const Icon(Icons.search))
-          // ],
           centerTitle: true,
           elevation: 0.5,
           title: TextField(

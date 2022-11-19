@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../Services/auth_service.dart';
 import '../Widgets/RoundedButton.dart';
+import 'FeedScreen.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({Key? key}) : super(key: key);
@@ -33,7 +35,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               height: 20,
             ),
             TextField(
-              decoration: const InputDecoration(hintText: 'Enter your name'),
+              decoration: const InputDecoration(hintText: 'NOME'),
               onChanged: (value) {
                 _name = value;
               },
@@ -42,8 +44,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               height: 20,
             ),
             TextField(
-              decoration:
-                  const InputDecoration(hintText: 'Enter your main email'),
+              decoration: const InputDecoration(hintText: 'E-MAIL'),
               onChanged: (value) {
                 _email = value;
               },
@@ -56,8 +57,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 _password = value;
               },
               obscureText: true,
-              decoration:
-                  const InputDecoration(hintText: 'Enter your new password'),
+              decoration: const InputDecoration(hintText: 'SENHA'),
             ),
             const SizedBox(
               height: 30,
@@ -65,13 +65,35 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             RoundedButton(
               btnText: 'Criar conta',
               onBtnPressed: () async {
-                bool isValid =
-                    await AuthService.signUp(_name, _email, _password);
+                var result = await AuthService.signUp(_name, _email, _password);
+                bool isValid = result[0];
+                var user = result[1];
+                // DatabaseServices.updateUserData(user);
                 if (isValid) {
-                  print('Conta criada');
-                  Navigator.pop(context);
+                  Fluttertoast.showToast(
+                      msg: 'E-mail $_email cadastrado com sucesso.',
+                      toastLength: Toast.LENGTH_LONG,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 7,
+                      backgroundColor: Colors.amber,
+                      textColor: Colors.white,
+                      fontSize: 15);
+                  // Navigator.pop(context);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => FeedScreen(
+                                currentUserId: user.uid,
+                              )));
                 } else {
-                  print('impossível criar conta');
+                  Fluttertoast.showToast(
+                      msg: 'Impossível concluir o registro do e-mail: $_email.',
+                      toastLength: Toast.LENGTH_LONG,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 7,
+                      backgroundColor: Colors.amber,
+                      textColor: Colors.white,
+                      fontSize: 15);
                 }
               },
             )
