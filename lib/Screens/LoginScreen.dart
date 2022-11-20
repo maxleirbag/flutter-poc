@@ -77,9 +77,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => FeedScreen(
+                          builder: (context) => SkeletonScreen(
                                 currentUserId: user,
-                                novoTitulo: 'Feed',
                               )));
                 } else {
                   Fluttertoast.showToast(

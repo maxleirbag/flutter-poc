@@ -16,6 +16,7 @@ class NotificationsScreen extends StatefulWidget {
 
 class _NotificationsScreenState extends State<NotificationsScreen> {
   List<Activity> _activities = [];
+  bool loading = false;
 
   setupActivities() async {
     List<Activity> activities =
@@ -23,6 +24,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     if (mounted) {
       setState(() {
         _activities = activities;
+        loading = false;
       });
     }
   }
@@ -33,8 +35,11 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (!snapshot.hasData) {
             return const SizedBox.shrink();
+            loading = false;
           } else {
+            loading = true;
             UserModel user = UserModel.fromDoc(snapshot.data);
+            loading = false;
             return Column(
               children: [
                 ListTile(
@@ -45,7 +50,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                       ? Text(
                           '${user.name} te segue. (${activity.timestamp.toDate().toString().substring(0, 19)})')
                       : Text(
-                          '${user.name} gostou do seu ZipZop. (${activity.timestamp.toDate().toString().substring(0, 19)})'),
+                          '${user.name} gostou do seu Pombo Correio. (${activity.timestamp.toDate().toString().substring(0, 19)})'),
                 ),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 15),
@@ -71,15 +76,23 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     return Scaffold(
         body: RefreshIndicator(
             onRefresh: () => setupActivities(),
-            child: _activities.isNotEmpty
-                ? ListView.builder(
-                    itemCount: _activities.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      Activity activity = _activities[index];
-                      return buildActivity(activity);
-                    })
-                : const Center(
-                    child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation(primaryColor)))));
+            child: _activities.isEmpty && loading == false
+                ? const Center(
+                    child: Text(
+                      'Não existem novas atividades',
+                      style: TextStyle(fontSize: 20, color: defaultDarkColor),
+                    ),
+                  )
+                : _activities.isNotEmpty
+                    ? ListView.builder(
+                        itemCount: _activities.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          Activity activity = _activities[index];
+                          return buildActivity(activity);
+                        })
+                    : const Center(
+                        child: CircularProgressIndicator(
+                            valueColor:
+                                AlwaysStoppedAnimation(primaryColor)))));
   }
 }

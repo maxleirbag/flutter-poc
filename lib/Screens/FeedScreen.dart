@@ -1,61 +1,61 @@
 import 'package:flutter/material.dart';
 import 'package:sabia_app/Constants/Constants.dart';
 
+import '../Models/PomboCorreio.dart';
 import '../Models/UserModel.dart';
-import '../Models/ZipZop.dart';
 import '../Services/DatabaseServices.dart';
-import '../Widgets/ZipZopContainer.dart';
+import '../Widgets/PomboCorreioContainer.dart';
 
-class HomeScreen extends StatefulWidget {
+class FeedScreen extends StatefulWidget {
   final String currentUserId;
 
-  const HomeScreen({super.key, required this.currentUserId});
+  const FeedScreen({super.key, required this.currentUserId});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<FeedScreen> createState() => _FeedScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  List _followingZipZops = [];
+class _FeedScreenState extends State<FeedScreen> {
+  List _followingPombosCorreios = [];
   bool _loading = false;
 
-  buildZipZops(ZipZop zipZop, UserModel author) {
+  buildPombosCorreios(PomboCorreio pomboCorreio, UserModel author) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 15),
-      child: ZipZopContainer(
-        zipZop: zipZop,
+      child: PomboCorreioContainer(
+        pomboCorreio: pomboCorreio,
         author: author,
         currentUserId: widget.currentUserId,
       ),
     );
   }
 
-  showFollowingZipZops(String currentUserId) {
-    List<Widget> followingZipZopsList = [];
-    for (ZipZop zipZop in _followingZipZops) {
-      followingZipZopsList.add(FutureBuilder(
-          future: usersRef.doc(zipZop.authorId).get(),
+  showFollowingPombosCorreios(String currentUserId) {
+    List<Widget> followingPombosCorreiosList = [];
+    for (PomboCorreio pomboCorreio in _followingPombosCorreios) {
+      followingPombosCorreiosList.add(FutureBuilder(
+          future: usersRef.doc(pomboCorreio.authorId).get(),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.hasData) {
               UserModel author = UserModel.fromDoc(snapshot.data);
-              return buildZipZops(zipZop, author);
+              return buildPombosCorreios(pomboCorreio, author);
             } else {
               return const SizedBox.shrink();
             }
           }));
     }
-    return followingZipZopsList;
+    return followingPombosCorreiosList;
   }
 
-  setupFollowingZipZops() async {
+  setupFollowingPombosCorreios() async {
     setState(() {
       _loading = true;
     });
-    List followingZipZops =
-        await DatabaseServices.getHomeZipZops(widget.currentUserId);
+    List followingPombosCorreios =
+        await DatabaseServices.getHomePombosCorreios(widget.currentUserId);
     if (mounted) {
       setState(() {
-        _followingZipZops = followingZipZops;
+        _followingPombosCorreios = followingPombosCorreios;
         _loading = false;
       });
     }
@@ -64,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    setupFollowingZipZops();
+    setupFollowingPombosCorreios();
   }
 
   @override
@@ -72,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
         backgroundColor: defaultLightColor,
         body: RefreshIndicator(
-          onRefresh: () => setupFollowingZipZops(),
+          onRefresh: () => setupFollowingPombosCorreios(),
           child: ListView(
             physics: const BouncingScrollPhysics(
               parent: AlwaysScrollableScrollPhysics(),
@@ -80,29 +80,20 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               _loading
                   ? const LinearProgressIndicator()
-                  : const SizedBox.shrink(),
-              const SizedBox(height: 5),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const SizedBox(height: 5),
-                  Column(
-                    children: _followingZipZops.isEmpty && _loading == false
-                        ? [
-                            const SizedBox(height: 5),
-                            const Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 25),
-                              child: Text(
-                                'Não existem novos ZipZops',
-                                style: TextStyle(
-                                    fontSize: 20, color: defaultDarkColor),
+                  : Column(
+                      children: _followingPombosCorreios.isEmpty &&
+                              _loading == false
+                          ? [
+                              const Center(
+                                child: Text(
+                                  'Não existem novos Pombos Correios',
+                                  style: TextStyle(
+                                      fontSize: 20, color: defaultDarkColor),
+                                ),
                               ),
-                            )
-                          ]
-                        : showFollowingZipZops(widget.currentUserId),
-                  ),
-                ],
-              )
+                            ]
+                          : showFollowingPombosCorreios(widget.currentUserId),
+                    )
             ],
           ),
         ));

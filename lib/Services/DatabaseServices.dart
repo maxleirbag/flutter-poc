@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sabia_app/Constants/Constants.dart';
-import 'package:sabia_app/Models/ZipZop.dart';
+import 'package:sabia_app/Models/PomboCorreio.dart';
 
 import '../Models/Activity.dart';
 import '../Models/UserModel.dart';
@@ -98,123 +98,135 @@ class DatabaseServices {
     return followingDoc.exists;
   }
 
-  static void createZipZop(ZipZop zipZop) {
-    zipZopsRef.doc(zipZop.authorId).set({'zipZopTime': zipZop.timestamp});
-    zipZopsRef.doc(zipZop.authorId).collection('userZipZops').add({
-      'text': zipZop.text,
-      'authorId': zipZop.authorId,
-      'timestamp': zipZop.timestamp,
-      'likes': zipZop.likes,
-      'shares': zipZop.shares,
+  static void createPomboCorreio(PomboCorreio pomboCorreio) {
+    pomboCorreiosRef
+        .doc(pomboCorreio.authorId)
+        .set({'pomboCorreioTime': pomboCorreio.timestamp});
+    pomboCorreiosRef
+        .doc(pomboCorreio.authorId)
+        .collection('userPombosCorreios')
+        .add({
+      'text': pomboCorreio.text,
+      'authorId': pomboCorreio.authorId,
+      'timestamp': pomboCorreio.timestamp,
+      'likes': pomboCorreio.likes,
+      'shares': pomboCorreio.shares,
     }).then((doc) async {
-      QuerySnapshot followerSnapshot =
-          await followersRef.doc(zipZop.authorId).collection('Followers').get();
+      QuerySnapshot followerSnapshot = await followersRef
+          .doc(pomboCorreio.authorId)
+          .collection('Followers')
+          .get();
       for (var docSnapshot in followerSnapshot.docs) {
         feedRefs.doc(docSnapshot.id).collection('userFeed').doc(doc.id).set({
-          'text': zipZop.text,
-          'authorId': zipZop.authorId,
-          'timestamp': zipZop.timestamp,
-          'likes': zipZop.likes,
-          'shares': zipZop.shares,
+          'text': pomboCorreio.text,
+          'authorId': pomboCorreio.authorId,
+          'timestamp': pomboCorreio.timestamp,
+          'likes': pomboCorreio.likes,
+          'shares': pomboCorreio.shares,
         });
       }
     });
   }
 
-  static Future<List> getUserZipZops(String userId) async {
-    QuerySnapshot userZipZopsSnap = await zipZopsRef
+  static Future<List> getUserPombosCorreios(String userId) async {
+    QuerySnapshot userPombosCorreiosSnap = await pomboCorreiosRef
         .doc(userId)
-        .collection('userZipZops')
+        .collection('userPombosCorreios')
         .orderBy('timestamp', descending: true)
         .get();
-    List<ZipZop> userZipZops =
-        userZipZopsSnap.docs.map((doc) => ZipZop.fromDoc(doc)).toList();
-    return userZipZops;
+    List<PomboCorreio> userPombosCorreios = userPombosCorreiosSnap.docs
+        .map((doc) => PomboCorreio.fromDoc(doc))
+        .toList();
+    return userPombosCorreios;
   }
 
-  static Future<List> getHomeZipZops(String currentUserId) async {
-    QuerySnapshot homeZipZops = await feedRefs
+  static Future<List> getHomePombosCorreios(String currentUserId) async {
+    QuerySnapshot homePombosCorreios = await feedRefs
         .doc(currentUserId)
         .collection('userFeed')
         .orderBy('timestamp', descending: true)
         .get();
 
-    List<ZipZop> followingZipZops =
-        homeZipZops.docs.map((doc) => ZipZop.fromDoc(doc)).toList();
-    return followingZipZops;
+    List<PomboCorreio> followingPombosCorreios = homePombosCorreios.docs
+        .map((doc) => PomboCorreio.fromDoc(doc))
+        .toList();
+    return followingPombosCorreios;
   }
 
-  static void likeZipZop(String currentUserId, ZipZop zipZop) {
-    DocumentReference zipZopDocProfile = zipZopsRef
-        .doc(zipZop.authorId)
-        .collection('userZipZops')
-        .doc(zipZop.id);
-    zipZopDocProfile.get().then((doc) {
+  static void likePomboCorreio(
+      String currentUserId, PomboCorreio pomboCorreio) {
+    DocumentReference pomboCorreioDocProfile = pomboCorreiosRef
+        .doc(pomboCorreio.authorId)
+        .collection('userPombosCorreios')
+        .doc(pomboCorreio.id);
+    pomboCorreioDocProfile.get().then((doc) {
       final docData = doc.data() as Map<dynamic, dynamic>;
       int likes = docData['likes'];
-      zipZopDocProfile.update({'likes': likes + 1});
+      pomboCorreioDocProfile.update({'likes': likes + 1});
     });
 
-    DocumentReference zipZopDocFeed =
-        feedRefs.doc(currentUserId).collection('userFeed').doc(zipZop.id);
-    zipZopDocFeed.get().then((doc) {
+    DocumentReference pomboCorreioDocFeed =
+        feedRefs.doc(currentUserId).collection('userFeed').doc(pomboCorreio.id);
+    pomboCorreioDocFeed.get().then((doc) {
       if (doc.exists) {
         final docData = doc.data() as Map<dynamic, dynamic>;
         int likes = docData['likes'];
-        zipZopDocFeed.update({'likes': likes + 1});
+        pomboCorreioDocFeed.update({'likes': likes + 1});
       }
     });
 
     likesRef
-        .doc(zipZop.id)
-        .collection('zipZopLikes')
+        .doc(pomboCorreio.id)
+        .collection('pomboCorreioLikes')
         .doc(currentUserId)
         .set({});
 
-    addActivity(currentUserId, zipZop, false, null);
+    addActivity(currentUserId, pomboCorreio, false, null);
   }
 
-  static void unlikeZipZop(String currentUserId, ZipZop zipZop) {
-    DocumentReference zipZopDocProfile = zipZopsRef
-        .doc(zipZop.authorId)
-        .collection('userZipZops')
-        .doc(zipZop.id);
-    zipZopDocProfile.get().then((doc) {
+  static void unlikePomboCorreio(
+      String currentUserId, PomboCorreio pomboCorreio) {
+    DocumentReference pomboCorreioDocProfile = pomboCorreiosRef
+        .doc(pomboCorreio.authorId)
+        .collection('userPombosCorreios')
+        .doc(pomboCorreio.id);
+    pomboCorreioDocProfile.get().then((doc) {
       final docData = doc.data() as Map<dynamic, dynamic>;
       int likes = docData['likes'];
-      zipZopDocProfile.update({'likes': likes - 1});
+      pomboCorreioDocProfile.update({'likes': likes - 1});
     });
 
-    DocumentReference zipZopDocFeed =
-        feedRefs.doc(currentUserId).collection('userFeed').doc(zipZop.id);
-    zipZopDocFeed.get().then((doc) {
+    DocumentReference pomboCorreioDocFeed =
+        feedRefs.doc(currentUserId).collection('userFeed').doc(pomboCorreio.id);
+    pomboCorreioDocFeed.get().then((doc) {
       if (doc.exists) {
         final docData = doc.data() as Map<dynamic, dynamic>;
         int likes = docData['likes'];
-        zipZopDocFeed.update({'likes': likes - 1});
+        pomboCorreioDocFeed.update({'likes': likes - 1});
       }
     });
 
     likesRef
-        .doc(zipZop.id)
-        .collection('zipZopLikes')
+        .doc(pomboCorreio.id)
+        .collection('pomboCorreioLikes')
         .doc(currentUserId)
         .get()
         .then((doc) => doc.reference.delete());
   }
 
-  static Future<bool> isLikeZipZop(String currentUserId, ZipZop zipZop) async {
+  static Future<bool> isLikePomboCorreio(
+      String currentUserId, PomboCorreio pomboCorreio) async {
     DocumentSnapshot userDoc = await likesRef
-        .doc(zipZop.id)
-        .collection('zipZopLikes')
+        .doc(pomboCorreio.id)
+        .collection('pomboCorreioLikes')
         .doc(currentUserId)
         .get();
 
     return userDoc.exists;
   }
 
-  static void addActivity(String currentUserId, ZipZop? zipZop, bool follow,
-      String? followedUserId) {
+  static void addActivity(String currentUserId, PomboCorreio? pomboCorreio,
+      bool follow, String? followedUserId) {
     if (follow) {
       activitiesRef.doc(followedUserId).collection('userActivities').add({
         'fromUserId': currentUserId,
@@ -222,7 +234,10 @@ class DatabaseServices {
         'follow': true,
       });
     } else {
-      activitiesRef.doc(zipZop!.authorId).collection('userActivities').add({
+      activitiesRef
+          .doc(pomboCorreio!.authorId)
+          .collection('userActivities')
+          .add({
         'fromUserId': currentUserId,
         'timestamp': Timestamp.fromDate(DateTime.now()),
         'follow': false,
@@ -239,15 +254,13 @@ class DatabaseServices {
 
     List<Activity> activities = [];
 
-    var activity;
+    dynamic activity;
     for (activity in userActivitiesSnapshot.docs) {
-      // print(activity.data());
-      var coisa = new Activity(
+      print(activity.data());
+      var coisa = Activity(
           fromUserId: activity.data()['fromUserId'],
           timestamp: activity.data()['timestamp'],
-          follow: activity.data()['follow'].toString().contains('true')
-              ? true
-              : false);
+          follow: activity.data()['follow']);
       activities.add(coisa);
     }
 

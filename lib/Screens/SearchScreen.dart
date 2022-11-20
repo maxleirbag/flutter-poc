@@ -59,7 +59,9 @@ class _SearchScreenState extends State<SearchScreen> {
     return Scaffold(
         // TODO remover campo de busca da AppBar
         // Container com campos de Nome + Email
+
         appBar: AppBar(
+          backgroundColor: secondaryColor,
           leading: IconButton(
               color: defaultLightColor,
               onPressed: () {
@@ -88,45 +90,53 @@ class _SearchScreenState extends State<SearchScreen> {
             onChanged: (input) => inputText = input,
           ),
         ),
-        body: _users == null
-            ? Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(Icons.search, color: defaultDarkColor, size: 200),
-                    Text(
-                      'Buscar perfil do Sabiá App...',
-                      style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w400,
-                          color: defaultDarkColor),
+        //
+        //
+        body: Column(
+          children: [
+            Container(
+              child: _users == null
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(Icons.search, color: tertiaryColor, size: 200),
+                          Text(
+                            'Buscar perfil do Sabiá App...',
+                            style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.w400,
+                                color: tertiaryColor),
+                          )
+                        ],
+                      ),
                     )
-                  ],
-                ),
-              )
-            // : Container(),
-            : FutureBuilder(
-                future: _users,
-                builder: (BuildContext context,
-                    AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (!snapshot.hasData) {
-                    return const Center(
-                      // child: CircularProgressIndicator(),
-                      child: Text('Não tem snapshot data'),
-                    );
-                  }
-                  if (snapshot.data!.docs.isEmpty) {
-                    return const Center(
-                      child: Text('Nenhum usuário encontrado com esse nome!'),
-                    );
-                  }
-                  return ListView.builder(
-                      itemCount: snapshot.data!.docs.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        UserModel user =
-                            UserModel.fromDoc(snapshot.data!.docs[index]);
-                        return buildUserTile(user);
-                      });
-                }));
+                  : FutureBuilder(
+                      future: _users,
+                      builder: (BuildContext context,
+                          AsyncSnapshot<QuerySnapshot> snapshot) {
+                        if (!snapshot.hasData) {
+                          return const Center(
+                            // child: CircularProgressIndicator(),
+                            child: Text('Não tem snapshot data'),
+                          );
+                        }
+                        if (snapshot.data!.docs.isEmpty) {
+                          return const Center(
+                            child: Text(
+                                'Nenhum usuário encontrado com esse nome!'),
+                          );
+                        }
+                        return ListView.builder(
+                            itemCount: snapshot.data!.docs.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              UserModel user =
+                                  UserModel.fromDoc(snapshot.data!.docs[index]);
+                              return buildUserTile(user);
+                            });
+                      }),
+            )
+          ],
+        ));
   }
 }

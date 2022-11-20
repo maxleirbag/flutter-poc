@@ -87,9 +87,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => FeedScreen(
+                          builder: (context) => SkeletonScreen(
                                 currentUserId: user.uid,
-                                novoTitulo: 'Feed',
                               )));
                 } else {
                   Fluttertoast.showToast(

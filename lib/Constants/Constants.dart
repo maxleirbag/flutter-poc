@@ -3,8 +3,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 // Cores
-const Color KzipZopColor = Colors.lightGreen;
-
 const Color defaultDarkColor = Color.fromARGB(255, 56, 56, 56);
 const Color defaultLightColor = Color.fromARGB(255, 243, 243, 243);
 const Color defaultGrayColor = Color.fromARGB(180, 120, 120, 120);
@@ -19,7 +17,7 @@ final storageRef = FirebaseStorage.instance.ref();
 final usersRef = _firestore.collection('users');
 final followersRef = _firestore.collection('followers');
 final followingRef = _firestore.collection('following');
-final zipZopsRef = _firestore.collection('zipzops');
+final pomboCorreiosRef = _firestore.collection('pomboscorreios');
 final feedRefs = _firestore.collection('feeds');
 final likesRef = _firestore.collection('likes');
 final activitiesRef = _firestore.collection('activities');

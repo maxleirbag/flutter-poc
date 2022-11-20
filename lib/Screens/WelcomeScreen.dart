@@ -28,12 +28,12 @@ class WelcomeScreenState extends State<WelcomeScreen> {
                     width: MediaQuery.of(context).size.width,
                   ),
                   Image.asset(
-                    'assets/zip zop.png',
+                    'assets/pigeon-colored.png',
                     height: 200,
                     width: 200,
                   ),
                   const Text(
-                    'Se tá a internet, é verdade',
+                    'Pombo App',
                     style: TextStyle(
                         color: defaultDarkColor,
                         fontSize: 35,

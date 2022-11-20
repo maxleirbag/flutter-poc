@@ -45,6 +45,7 @@ dependencies:
   path_provider:
   uuid:
   fluttertoast: ^8.0.8
+  flutter_dotenv: ^5.0.2
 
 
 dev_dependencies:
@@ -70,6 +71,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
+    - config.env
 
   # To add assets to your application, add an assets section, like this:
   # assets:

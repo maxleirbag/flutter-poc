@@ -3,39 +3,43 @@ import 'package:flutter/material.dart';
 
 import '../Constants/Constants.dart';
 import '../Services/auth_service.dart';
-import 'CreateZipZopScreen.dart';
 import 'FeedScreen.dart';
 import 'NotificationsScreen.dart';
+import 'PomboCorreioScreen.dart';
 import 'ProfileScreen.dart';
 import 'SearchScreen.dart';
 import 'WelcomeScreen.dart';
 
-class FeedScreen extends StatefulWidget {
+class SkeletonScreen extends StatefulWidget {
   final String currentUserId;
-  final String novoTitulo;
 
-  const FeedScreen(
-      {super.key, required this.currentUserId, required this.novoTitulo});
+  SkeletonScreen({super.key, required this.currentUserId});
 
   @override
-  State<FeedScreen> createState() => _FeedScreenState();
+  State<SkeletonScreen> createState() => _SkeletonScreenState();
 }
 
-class _FeedScreenState extends State<FeedScreen> {
+class _SkeletonScreenState extends State<SkeletonScreen> {
   int selectedTab = 0;
-  String titleScreen = 'coisa';
+  List<String> possibleTitles = ['Feed', 'Explorar', 'Notificações', 'Perfil'];
+  final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+          leading: Builder(
+            builder: (context) => IconButton(
+                onPressed: () => Scaffold.of(context).openDrawer(),
+                icon: Image.asset('assets/pigeon-white.png')),
+          ),
           backgroundColor: primaryColor,
           title: Text(
-            titleScreen,
+            possibleTitles[selectedTab],
             style: const TextStyle(color: defaultDarkColor),
-          )), // customizar
+          )),
       body: [
-        HomeScreen(
+        FeedScreen(
           currentUserId: widget.currentUserId,
         ),
         SearchScreen(
@@ -54,7 +58,7 @@ class _FeedScreenState extends State<FeedScreen> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => CreateZipZopScreen(
+                  builder: (context) => CreatePomboCorreioScreen(
                         currentUserId: widget.currentUserId,
                       )));
         },
@@ -65,7 +69,6 @@ class _FeedScreenState extends State<FeedScreen> {
       ),
       drawer: Drawer(
         child: ListView(
-          // Important: Remove any padding from the ListView.
           padding: EdgeInsets.zero,
           children: [
             const DrawerHeader(
@@ -107,7 +110,6 @@ class _FeedScreenState extends State<FeedScreen> {
               ),
               title: const Text('Log out'),
               onTap: () {
-                // Navigator.pop(context);
                 AuthService.logout();
                 Navigator.pushReplacement(
                     context,

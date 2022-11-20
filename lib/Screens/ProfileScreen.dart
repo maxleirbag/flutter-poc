@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sabia_app/Constants/Constants.dart';
-import 'package:sabia_app/Screens/SkeletonScreen.dart';
-import 'package:sabia_app/Widgets/ZipZopContainer.dart';
 
 import '../Models/UserModel.dart';
 import '../Services/DatabaseServices.dart';
+import '../Widgets/PomboCorreioContainer.dart';
 import 'EditProfileScreen.dart';
+import 'SkeletonScreen.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String currentUserId;
@@ -25,14 +25,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
   int _followingCount = 0;
   bool _isFollowing = false;
   int _profileSegmentedValue = 0;
-  List<dynamic> _allZipZops = [];
-  // List<ZipZop> _mediaZipZops = [];
+  List<dynamic> _allPombosCorreios = [];
+  // List<PomboCorreio> _mediaPombosCorreios = [];
 
   final Map<int, Widget> _profileTabs = <int, Widget>{
     0: const Padding(
       padding: EdgeInsets.symmetric(vertical: 10),
       child: Text(
-        'ZipZops',
+        'PombosCorreios',
         style: TextStyle(
           fontSize: 13,
           fontWeight: FontWeight.w700,
@@ -53,12 +53,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     ),
   };
 
-  getAllZipZops() async {
-    List userZipZops =
-        await DatabaseServices.getUserZipZops(widget.visitedUserId);
+  getAllPombosCorreios() async {
+    List userPombosCorreios =
+        await DatabaseServices.getUserPombosCorreios(widget.visitedUserId);
     if (mounted) {
       setState(() {
-        _allZipZops = userZipZops;
+        _allPombosCorreios = userPombosCorreios;
       });
     }
   }
@@ -121,7 +121,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     getFollowersCount();
     getFollowingCount();
     setupIsFollowing();
-    getAllZipZops();
+    getAllPombosCorreios();
   }
 
   Widget buildProfileWidgets(UserModel author) {
@@ -130,24 +130,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
         return ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: _allZipZops.length,
+            itemCount: _allPombosCorreios.length,
             itemBuilder: (context, index) {
-              return ZipZopContainer(
+              return PomboCorreioContainer(
                 currentUserId: widget.currentUserId,
                 author: author,
-                zipZop: _allZipZops[index],
+                pomboCorreio: _allPombosCorreios[index],
               );
             });
       // case 1:
       //   return ListView.builder(
       //       shrinkWrap: true,
       //       physics: const NeverScrollableScrollPhysics(),
-      //       itemCount: _mediaZipZops.length,
+      //       itemCount: _mediaPombosCorreios.length,
       //       itemBuilder: (context, index) {
-      //         return ZipZopContainer(
+      //         return PomboCorreioContainer(
       //           currentUserId: widget.currentUserId,
       //           author: author,
-      //           zipZop: _mediaZipZops[index],
+      //           pomboCorreio: _mediaPombosCorreios[index],
       //         );
       //       });
       default:
@@ -169,9 +169,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => FeedScreen(
+                      builder: (context) => SkeletonScreen(
                             currentUserId: widget.currentUserId,
-                            novoTitulo: 'Perfil',
                           )));
             },
             icon: const Icon(
