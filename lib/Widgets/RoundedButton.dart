@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sabia_app/Constants/Constants.dart';
 
 class RoundedButton extends StatelessWidget {
   final String btnText;
@@ -12,7 +13,7 @@ class RoundedButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       elevation: 5,
-      color: Colors.green,
+      color: primaryColor,
       borderRadius: BorderRadius.circular(25),
       child: MaterialButton(
         onPressed: () => onBtnPressed(),
@@ -20,7 +21,7 @@ class RoundedButton extends StatelessWidget {
         height: 60,
         child: Text(
           btnText,
-          style: const TextStyle(color: Colors.white, fontSize: 20),
+          style: const TextStyle(color: defaultDarkColor, fontSize: 20),
         ),
       ),
     );

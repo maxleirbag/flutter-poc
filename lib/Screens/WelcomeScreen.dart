@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:sabia_app/Constants/Constants.dart';
 import 'package:sabia_app/Screens/LoginScreen.dart';
 import 'package:sabia_app/Screens/RegistrationScreen.dart';
+
 import '../Widgets/RoundedButton.dart';
-import '../Widgets/DrawerSiderBar.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -33,7 +34,10 @@ class WelcomeScreenState extends State<WelcomeScreen> {
                   ),
                   const Text(
                     'Se tá a internet, é verdade',
-                    style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        color: defaultDarkColor,
+                        fontSize: 35,
+                        fontWeight: FontWeight.bold),
                   ),
                 ],
               ),

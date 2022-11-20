@@ -42,13 +42,15 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                       radius: 20,
                       backgroundImage: Image.asset(user.profilePicture).image),
                   title: activity.follow == true
-                      ? Text('${user.name} te segue.')
-                      : Text('${user.name} gostou do seu ZipZop.'),
+                      ? Text(
+                          '${user.name} te segue. (${activity.timestamp.toDate().toString().substring(0, 19)})')
+                      : Text(
+                          '${user.name} gostou do seu ZipZop. (${activity.timestamp.toDate().toString().substring(0, 19)})'),
                 ),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 15),
                   child: Divider(
-                    color: KzipZopColor,
+                    color: primaryColor,
                     thickness: 1,
                   ),
                 )
@@ -68,15 +70,16 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: RefreshIndicator(
-      onRefresh: () => setupActivities(),
-      child: _activities.isNotEmpty
-          ? ListView.builder(
-              itemCount: _activities.length,
-              itemBuilder: (BuildContext context, int index) {
-                Activity activity = _activities[index];
-                return buildActivity(activity);
-              })
-          : Text('já era'),
-    ));
+            onRefresh: () => setupActivities(),
+            child: _activities.isNotEmpty
+                ? ListView.builder(
+                    itemCount: _activities.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      Activity activity = _activities[index];
+                      return buildActivity(activity);
+                    })
+                : const Center(
+                    child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation(primaryColor)))));
   }
 }

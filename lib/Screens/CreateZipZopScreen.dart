@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sabia_app/Constants/Constants.dart';
+
 import '../Models/ZipZop.dart';
 import '../Services/DatabaseServices.dart';
 import '../Widgets/RoundedButton.dart';
@@ -21,14 +22,14 @@ class _CreateZipZopScreenState extends State<CreateZipZopScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: defaultLightColor,
       appBar: AppBar(
-        backgroundColor: KzipZopColor,
+        backgroundColor: primaryColor,
         centerTitle: true,
         title: const Text(
           'ZipZop',
           style: TextStyle(
-            color: Colors.white,
+            color: defaultDarkColor,
             fontSize: 20,
           ),
         ),
@@ -67,6 +68,7 @@ class _CreateZipZopScreenState extends State<CreateZipZopScreen> {
                     id: '${widget.currentUserId}${DateTime.now()}',
                   );
                   DatabaseServices.createZipZop(zipZop);
+                  await DatabaseServices.getUserZipZops(widget.currentUserId);
                   Navigator.pop(context);
                 }
                 setState(() {

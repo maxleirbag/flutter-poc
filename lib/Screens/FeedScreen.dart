@@ -1,109 +1,110 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:sabia_app/Constants/Constants.dart';
 
-import '../Services/auth_service.dart';
-import 'CreateZipZopScreen.dart';
-import 'HomeScreen.dart';
-import 'NotificationsScreen.dart';
-import 'ProfileScreen.dart';
-import 'SearchScreen.dart';
-import 'WelcomeScreen.dart';
+import '../Models/UserModel.dart';
+import '../Models/ZipZop.dart';
+import '../Services/DatabaseServices.dart';
+import '../Widgets/ZipZopContainer.dart';
 
-class FeedScreen extends StatefulWidget {
+class HomeScreen extends StatefulWidget {
   final String currentUserId;
 
-  const FeedScreen({super.key, required this.currentUserId});
+  const HomeScreen({super.key, required this.currentUserId});
 
   @override
-  State<FeedScreen> createState() => _FeedScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _FeedScreenState extends State<FeedScreen> {
-  int selectedTab = 0;
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('coisa')), // customizar
-      body: [
-        HomeScreen(
-          currentUserId: widget.currentUserId,
-        ),
-        SearchScreen(
-          currentUserId: widget.currentUserId,
-        ),
-        NotificationsScreen(
-          currentUserId: widget.currentUserId,
-        ),
-        ProfileScreen(
-            currentUserId: widget.currentUserId,
-            visitedUserId: widget.currentUserId)
-      ].elementAt(selectedTab),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.white,
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => CreateZipZopScreen(
-                        currentUserId: widget.currentUserId,
-                      )));
-        },
-        child: const Icon(
-          Icons.note_add,
-          color: Colors.green,
-        ),
-      ),
-      drawer: Drawer(
-        child: ListView(
-          // Important: Remove any padding from the ListView.
-          padding: EdgeInsets.zero,
-          children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Text('Menu'),
-            ),
-            ListTile(
-              leading: const Icon(CupertinoIcons.moon),
-              title: const Text('Dark mode'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.logout),
-              title: const Text('Log out'),
-              onTap: () {
-                // Navigator.pop(context);
-                AuthService.logout();
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const WelcomeScreen()));
-              },
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: CupertinoTabBar(
-        onTap: (index) {
-          setState(() {
-            selectedTab = index;
-          });
-        },
-        currentIndex: selectedTab,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home, color: Colors.green)),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.search, color: Colors.green)),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.notifications, color: Colors.green)),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.person, color: Colors.green)),
-        ],
+class _HomeScreenState extends State<HomeScreen> {
+  List _followingZipZops = [];
+  bool _loading = false;
+
+  buildZipZops(ZipZop zipZop, UserModel author) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      child: ZipZopContainer(
+        zipZop: zipZop,
+        author: author,
+        currentUserId: widget.currentUserId,
       ),
     );
   }
+
+  showFollowingZipZops(String currentUserId) {
+    List<Widget> followingZipZopsList = [];
+    for (ZipZop zipZop in _followingZipZops) {
+      followingZipZopsList.add(FutureBuilder(
+          future: usersRef.doc(zipZop.authorId).get(),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (snapshot.hasData) {
+              UserModel author = UserModel.fromDoc(snapshot.data);
+              return buildZipZops(zipZop, author);
+            } else {
+              return const SizedBox.shrink();
+            }
+          }));
+    }
+    return followingZipZopsList;
+  }
+
+  setupFollowingZipZops() async {
+    setState(() {
+      _loading = true;
+    });
+    List followingZipZops =
+        await DatabaseServices.getHomeZipZops(widget.currentUserId);
+    if (mounted) {
+      setState(() {
+        _followingZipZops = followingZipZops;
+        _loading = false;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setupFollowingZipZops();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        backgroundColor: defaultLightColor,
+        body: RefreshIndicator(
+          onRefresh: () => setupFollowingZipZops(),
+          child: ListView(
+            physics: const BouncingScrollPhysics(
+              parent: AlwaysScrollableScrollPhysics(),
+            ),
+            children: [
+              _loading
+                  ? const LinearProgressIndicator()
+                  : const SizedBox.shrink(),
+              const SizedBox(height: 5),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const SizedBox(height: 5),
+                  Column(
+                    children: _followingZipZops.isEmpty && _loading == false
+                        ? [
+                            const SizedBox(height: 5),
+                            const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 25),
+                              child: Text(
+                                'Não existem novos ZipZops',
+                                style: TextStyle(
+                                    fontSize: 20, color: defaultDarkColor),
+                              ),
+                            )
+                          ]
+                        : showFollowingZipZops(widget.currentUserId),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ));
+  }
 }
-// }

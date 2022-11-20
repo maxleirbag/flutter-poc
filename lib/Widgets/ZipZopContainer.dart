@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sabia_app/Constants/Constants.dart';
 
 import '../Models/UserModel.dart';
 import '../Models/ZipZop.dart';
@@ -74,7 +75,8 @@ class _ZipZopContainerState extends State<ZipZopContainer> {
               Text(
                 widget.author.name,
                 style: const TextStyle(
-                  fontSize: 17,
+                  color: defaultDarkColor,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -84,7 +86,8 @@ class _ZipZopContainerState extends State<ZipZopContainer> {
           Text(
             widget.zipZop.text,
             style: const TextStyle(
-              fontSize: 15,
+              color: defaultDarkColor,
+              fontSize: 18,
             ),
           ),
           const SizedBox.shrink(),
@@ -97,7 +100,7 @@ class _ZipZopContainerState extends State<ZipZopContainer> {
                   IconButton(
                     icon: Icon(
                       _isLiked ? Icons.favorite : Icons.favorite_border,
-                      color: _isLiked ? Colors.blue : Colors.black,
+                      color: _isLiked ? Colors.blueAccent : Colors.black,
                     ),
                     onPressed: likeZipZop,
                   ),
@@ -108,12 +111,15 @@ class _ZipZopContainerState extends State<ZipZopContainer> {
               ),
               Text(
                 widget.zipZop.timestamp.toDate().toString().substring(0, 19),
-                style: const TextStyle(color: Colors.grey),
+                style: const TextStyle(color: defaultGrayColor),
               )
             ],
           ),
           const SizedBox(height: 10),
-          const Divider()
+          const Divider(
+            color: tertiaryColor,
+            thickness: 1,
+          )
         ],
       ),
     );

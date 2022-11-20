@@ -218,7 +218,8 @@ class DatabaseServices {
     if (follow) {
       activitiesRef.doc(followedUserId).collection('userActivities').add({
         'fromUserId': currentUserId,
-        'timestamp': Timestamp.fromDate(DateTime.now())
+        'timestamp': Timestamp.fromDate(DateTime.now()),
+        'follow': true,
       });
     } else {
       activitiesRef.doc(zipZop!.authorId).collection('userActivities').add({
@@ -230,64 +231,27 @@ class DatabaseServices {
   }
 
   static Future<List<Activity>> getActivities(String userId) async {
-    QuerySnapshot userActiviesSnapshot = await activitiesRef
+    QuerySnapshot userActivitiesSnapshot = await activitiesRef
         .doc(userId)
         .collection('userActivities')
         .orderBy('timestamp', descending: true)
         .get();
-    // Activity coisinha = Activity(
-    //     id: 'UoyFKgQRoFIWo3b9FKxM',
-    //     fromUserId: 'qzLBDsPaTGcrLK7Cr3cQAv01OAj2',
-    //     timestamp: Timestamp.now(),
-    //     follow: false);
-    Activity agoraVai = Activity(
-        id: userActiviesSnapshot.docs[0].id,
-        fromUserId: (userActiviesSnapshot.docs[0].data()! as Map)['fromUserId'],
-        timestamp: (userActiviesSnapshot.docs[0].data()! as Map)['timestamp'],
-        follow: (userActiviesSnapshot.docs[0].data()! as Map)['follow']);
 
-    List<Activity> coisa = [];
-    coisa.add(agoraVai);
-    return coisa;
-    // print([
-    //   // userActiviesSnapshot.docs,
-    //   // userActiviesSnapshot.docs[0].data(),
-    //   (userActiviesSnapshot.docs[0].data()! as Map)['fromUserId'],
-    //   userActiviesSnapshot.docs.length,
-    //   // Activity.fromDoc(userActiviesSnapshot.docs[0])
-    // ]);
+    List<Activity> activities = [];
 
-    // List<Activity> activities = userActiviesSnapshot.docs.map((doc) {
-    //   print([doc.id, doc.data()]);
-    //   // Activity nova = Activity(fromUserId: doc.data.fromUserId.toString(), timestamp: timestamp, follow: follow)
-    //   // doc.
-    //   return Activity.fromDoc(doc);
-    // }).toList();
-    // return activities;
+    var activity;
+    for (activity in userActivitiesSnapshot.docs) {
+      // print(activity.data());
+      var coisa = new Activity(
+          fromUserId: activity.data()['fromUserId'],
+          timestamp: activity.data()['timestamp'],
+          follow: activity.data()['follow'].toString().contains('true')
+              ? true
+              : false);
+      activities.add(coisa);
+    }
 
-    // List<Activity> coisa = [];
-    // for (var doc in userActiviesSnapshot.docs) {
-    //
-    //   // (doc.data()! as Map)['follow'].toString().toLowerCase() as bool);
-    //
-    //   Activity detailed = Activity(
-    //       id: doc.id,
-    //       fromUserId: (doc.data()! as Map)['fromUserId'].toString(),
-    //       timestamp: (doc.data()! as Map)['timestamp'] as Timestamp,
-    //       follow: true);
-    //   // (doc.data()! as Map)['follow'].toString().toLowerCase() as bool);
-    //   coisa.add(detailed);
-    // }
-    // return coisa;
-    // //   Iterable<Activity> activities = userActiviesSnapshot.docs.map((doc) {
-    // //     Activity detailed = Activity(
-    // //         id: doc.id,
-    // //         fromUserId: (doc.data()! as Map)['fromUserId'],
-    // //         timestamp: (doc.data()! as Map)['timestamp'],
-    // //         follow: (doc.data()! as Map)['follow']);
-    // //   }).cast<Activity>();
-    // //
-    // // return activities
+    return activities;
   }
 
   static String randomImageProfilePicker() {

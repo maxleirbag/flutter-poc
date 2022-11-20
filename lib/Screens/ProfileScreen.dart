@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sabia_app/Constants/Constants.dart';
-import 'package:sabia_app/Screens/FeedScreen.dart';
+import 'package:sabia_app/Screens/SkeletonScreen.dart';
 import 'package:sabia_app/Widgets/ZipZopContainer.dart';
 
 import '../Models/UserModel.dart';
@@ -36,7 +36,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         style: TextStyle(
           fontSize: 13,
           fontWeight: FontWeight.w700,
-          color: Colors.white,
+          color: defaultDarkColor,
         ),
       ),
     ),
@@ -47,7 +47,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         style: TextStyle(
           fontSize: 13,
           fontWeight: FontWeight.w700,
-          color: Colors.white,
+          color: defaultDarkColor,
         ),
       ),
     ),
@@ -154,7 +154,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         return const Center(
           child: Text(
             'Profile view deu errado',
-            style: TextStyle(fontSize: 25),
+            style: TextStyle(fontSize: 25, color: defaultDarkColor),
           ),
         );
     }
@@ -164,23 +164,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         floatingActionButton: IconButton(
+            color: defaultLightColor,
             onPressed: () {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => FeedScreen(
                             currentUserId: widget.currentUserId,
+                            novoTitulo: 'Perfil',
                           )));
             },
-            icon: const Icon(CupertinoIcons.arrow_left)),
-        backgroundColor: Colors.white,
+            icon: const Icon(
+              CupertinoIcons.arrow_left,
+              color: secondaryColor,
+            )),
+        backgroundColor: defaultLightColor,
         body: FutureBuilder(
           future: usersRef.doc(widget.visitedUserId).get(),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (!snapshot.hasData) {
               return const Center(
                   child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation(Colors.red)));
+                      valueColor: AlwaysStoppedAnimation(primaryColor)));
             }
             UserModel user = UserModel.fromDoc(snapshot.data);
             return ListView(
@@ -190,12 +195,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Container(
                   height: 150,
                   decoration: BoxDecoration(
-                    color: KzipZopColor,
+                    color: tertiaryColor,
                     image: user.coverImage.isEmpty
                         ? null
                         : DecorationImage(
                             fit: BoxFit.cover,
-                            // image: AssetImage('assets/tumblr cover.png')
                             image: Image.asset(user.coverImage).image),
                   ),
                 ),
@@ -234,15 +238,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         horizontal: 10),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20),
-                                      color: Colors.white,
-                                      border: Border.all(color: KzipZopColor),
+                                      color: defaultLightColor,
+                                      border: Border.all(color: tertiaryColor),
                                     ),
                                     child: const Center(
                                       child: Text(
-                                        'Edit',
+                                        'Editar',
                                         style: TextStyle(
                                           fontSize: 17,
-                                          color: KzipZopColor,
+                                          color: tertiaryColor,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
@@ -259,9 +263,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20),
                                       color: _isFollowing
-                                          ? Colors.white
-                                          : KzipZopColor,
-                                      border: Border.all(color: KzipZopColor),
+                                          ? defaultLightColor
+                                          : primaryColor,
+                                      border: Border.all(color: primaryColor),
                                     ),
                                     child: Center(
                                       child: Text(
@@ -269,8 +273,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         style: TextStyle(
                                           fontSize: 17,
                                           color: _isFollowing
-                                              ? KzipZopColor
-                                              : Colors.white,
+                                              ? primaryColor
+                                              : defaultDarkColor,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
@@ -283,16 +287,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Text(
                         user.name,
                         style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: defaultDarkColor),
                       ),
                       const SizedBox(height: 10),
                       Text(
                         user.bio,
                         style: const TextStyle(
-                          fontSize: 15,
-                        ),
+                            fontSize: 20,
+                            color: defaultGrayColor,
+                            fontStyle: FontStyle.italic),
                       ),
                       const SizedBox(height: 15),
                       Row(
@@ -300,19 +305,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           Text(
                             '$_followingCount Following',
                             style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              letterSpacing: 2,
-                            ),
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                letterSpacing: 2,
+                                color: defaultDarkColor),
                           ),
                           const SizedBox(width: 20),
                           Text(
                             '$_followersCount Followers',
                             style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              letterSpacing: 2,
-                            ),
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                letterSpacing: 2,
+                                color: defaultDarkColor),
                           ),
                         ],
                       ),
@@ -321,8 +326,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         width: MediaQuery.of(context).size.width,
                         child: CupertinoSlidingSegmentedControl(
                           groupValue: _profileSegmentedValue,
-                          thumbColor: KzipZopColor,
-                          backgroundColor: Colors.blueGrey,
+                          thumbColor: primaryColor,
+                          backgroundColor: defaultGrayColor,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 2, vertical: 2),
                           children: _profileTabs,
                           onValueChanged: (i) {
                             setState(() {

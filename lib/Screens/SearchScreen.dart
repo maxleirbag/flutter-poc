@@ -4,6 +4,8 @@ import 'package:sabia_app/Models/UserModel.dart';
 import 'package:sabia_app/Screens/ProfileScreen.dart';
 import 'package:sabia_app/Services/DatabaseServices.dart';
 
+import '../Constants/Constants.dart';
+
 class SearchScreen extends StatefulWidget {
   final String currentUserId;
 
@@ -59,6 +61,7 @@ class _SearchScreenState extends State<SearchScreen> {
         // Container com campos de Nome + Email
         appBar: AppBar(
           leading: IconButton(
+              color: defaultLightColor,
               onPressed: () {
                 getMatchedUsers();
                 _searchController.clear();
@@ -72,11 +75,14 @@ class _SearchScreenState extends State<SearchScreen> {
             decoration: InputDecoration(
                 suffixIcon: IconButton(
                   onPressed: _searchController.clear,
-                  icon: const Icon(Icons.clear),
+                  icon: const Icon(
+                    Icons.clear,
+                    color: defaultLightColor,
+                  ),
                 ),
                 contentPadding: const EdgeInsets.symmetric(vertical: 15),
                 hintText: inputText.isEmpty ? '(Nome de usuário)' : '',
-                hintStyle: const TextStyle(color: Colors.white),
+                hintStyle: const TextStyle(color: defaultLightColor),
                 border: InputBorder.none,
                 filled: true),
             onChanged: (input) => inputText = input,
@@ -87,11 +93,13 @@ class _SearchScreenState extends State<SearchScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
-                    Icon(Icons.search, size: 200),
+                    Icon(Icons.search, color: defaultDarkColor, size: 200),
                     Text(
                       'Buscar perfil do Sabiá App...',
-                      style:
-                          TextStyle(fontSize: 22, fontWeight: FontWeight.w400),
+                      style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w400,
+                          color: defaultDarkColor),
                     )
                   ],
                 ),

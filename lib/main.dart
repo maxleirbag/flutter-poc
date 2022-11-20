@@ -1,8 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:sabia_app/Screens/FeedScreen.dart';
+import 'package:sabia_app/Screens/SkeletonScreen.dart';
 
 import 'Screens/WelcomeScreen.dart';
 
@@ -23,15 +22,11 @@ class MyApp extends StatelessWidget {
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (BuildContext context, snapshot) {
         if (snapshot.hasData) {
-          if (kDebugMode) {
-            print(snapshot.hasData
-                ? snapshot.data!.uid.toString()
-                : 'sem usuário');
-          }
           return FeedScreen(
             currentUserId: snapshot.hasData
                 ? snapshot.data!.uid.toString()
                 : 'sem usuário',
+            novoTitulo: 'Erro: Usuário Inexistente',
           );
         } else {
           return const WelcomeScreen();

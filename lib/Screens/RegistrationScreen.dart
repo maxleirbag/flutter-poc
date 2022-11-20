@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../Constants/Constants.dart';
 import '../Services/auth_service.dart';
 import '../Widgets/RoundedButton.dart';
-import 'FeedScreen.dart';
+import 'SkeletonScreen.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({Key? key}) : super(key: key);
@@ -20,11 +21,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: primaryColor,
         centerTitle: true,
         elevation: 0,
         title: const Text(
           'Criação de Conta',
-          style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+              color: defaultDarkColor),
         ),
       ),
       body: Padding(
@@ -76,7 +81,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       gravity: ToastGravity.CENTER,
                       timeInSecForIosWeb: 7,
                       backgroundColor: Colors.amber,
-                      textColor: Colors.white,
+                      textColor: defaultLightColor,
                       fontSize: 15);
                   // Navigator.pop(context);
                   Navigator.push(
@@ -84,6 +89,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       MaterialPageRoute(
                           builder: (context) => FeedScreen(
                                 currentUserId: user.uid,
+                                novoTitulo: 'Feed',
                               )));
                 } else {
                   Fluttertoast.showToast(
@@ -92,7 +98,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       gravity: ToastGravity.CENTER,
                       timeInSecForIosWeb: 7,
                       backgroundColor: Colors.amber,
-                      textColor: Colors.white,
+                      textColor: defaultLightColor,
                       fontSize: 15);
                 }
               },

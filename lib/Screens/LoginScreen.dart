@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sabia_app/Widgets/RoundedButton.dart';
 
+import '../Constants/Constants.dart';
 import '../Services/auth_service.dart';
-import 'FeedScreen.dart';
+import 'SkeletonScreen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -20,11 +21,15 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: primaryColor,
         centerTitle: true,
         elevation: 0,
         title: const Text(
           'Log in',
-          style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              color: defaultDarkColor,
+              fontSize: 15,
+              fontWeight: FontWeight.bold),
         ),
       ),
       body: Padding(
@@ -67,13 +72,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       gravity: ToastGravity.CENTER,
                       timeInSecForIosWeb: 3,
                       backgroundColor: Colors.amber,
-                      textColor: Colors.white,
+                      textColor: defaultLightColor,
                       fontSize: 15);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => FeedScreen(
                                 currentUserId: user,
+                                novoTitulo: 'Feed',
                               )));
                 } else {
                   Fluttertoast.showToast(
@@ -82,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       gravity: ToastGravity.CENTER,
                       timeInSecForIosWeb: 5,
                       backgroundColor: Colors.amber,
-                      textColor: Colors.white,
+                      textColor: defaultLightColor,
                       fontSize: 15);
                 }
               },

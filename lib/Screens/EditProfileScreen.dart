@@ -69,14 +69,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
-                          color: KzipZopColor,
+                          color: primaryColor,
                         ),
                         child: const Center(
                           child: Text(
                             'Save',
                             style: TextStyle(
                               fontSize: 17,
-                              color: Colors.white,
+                              color: defaultDarkColor,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -94,7 +94,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           initialValue: _name,
                           decoration: InputDecoration(
                             labelText: _name,
-                            labelStyle: const TextStyle(color: KzipZopColor),
+                            labelStyle:
+                                const TextStyle(color: defaultDarkColor),
                           ),
                           validator: (input) => input!.trim().length < 2
                               ? 'please enter valid name'
@@ -108,7 +109,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           initialValue: _bio,
                           decoration: const InputDecoration(
                             labelText: 'Bio',
-                            labelStyle: TextStyle(color: KzipZopColor),
+                            labelStyle: TextStyle(color: defaultDarkColor),
                           ),
                           onSaved: (value) {
                             _bio = value!;
@@ -118,7 +119,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         _isLoading
                             ? const CircularProgressIndicator(
                                 valueColor:
-                                    AlwaysStoppedAnimation(KzipZopColor),
+                                    AlwaysStoppedAnimation(primaryColor),
                               )
                             : const SizedBox.shrink()
                       ],
