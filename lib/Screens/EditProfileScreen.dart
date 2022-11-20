@@ -112,6 +112,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     GestureDetector(
+                      onTap: () {},
                       child: RoundedButton(
                         btnText: 'Salvar alterações',
                         onBtnPressed: () => saveProfile(),

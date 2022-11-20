@@ -28,7 +28,7 @@ class _CreatePomboCorreioScreenState extends State<CreatePomboCorreioScreen> {
         backgroundColor: primaryColor,
         centerTitle: true,
         title: const Text(
-          'PomboCorreio',
+          'Pombo Correio',
           style: TextStyle(
             color: defaultDarkColor,
             fontSize: 20,
