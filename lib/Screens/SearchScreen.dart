@@ -57,84 +57,74 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        // TODO remover campo de busca da AppBar
-        // Container com campos de Nome + Email
-
-        appBar: AppBar(
-          backgroundColor: secondaryColor,
-          leading: IconButton(
-              color: defaultLightColor,
-              onPressed: () {
-                getMatchedUsers();
-                _searchController.clear();
-              },
-              icon: const Icon(Icons.search)),
-          centerTitle: true,
-          elevation: 0.5,
-          title: TextField(
-            textInputAction: TextInputAction.search,
-            controller: _searchController,
-            decoration: InputDecoration(
-                suffixIcon: IconButton(
-                  onPressed: _searchController.clear,
-                  icon: const Icon(
-                    Icons.clear,
-                    color: defaultLightColor,
-                  ),
+      appBar: AppBar(
+        backgroundColor: secondaryColor,
+        leading: IconButton(
+            color: defaultLightColor,
+            onPressed: () {
+              getMatchedUsers();
+              _searchController.clear();
+            },
+            icon: const Icon(Icons.search)),
+        centerTitle: true,
+        elevation: 0.5,
+        title: TextField(
+          textInputAction: TextInputAction.search,
+          controller: _searchController,
+          decoration: InputDecoration(
+              suffixIcon: IconButton(
+                onPressed: _searchController.clear,
+                icon: const Icon(
+                  Icons.clear,
+                  color: defaultLightColor,
                 ),
-                contentPadding: const EdgeInsets.symmetric(vertical: 15),
-                hintText: inputText.isEmpty ? '(Nome de usuário)' : '',
-                hintStyle: const TextStyle(color: defaultLightColor),
-                border: InputBorder.none,
-                filled: true),
-            onChanged: (input) => inputText = input,
-          ),
+              ),
+              contentPadding: const EdgeInsets.symmetric(vertical: 15),
+              hintText: inputText.isEmpty ? '(Nome de usuário)' : '',
+              hintStyle: const TextStyle(color: defaultLightColor),
+              border: InputBorder.none,
+              filled: true),
+          onChanged: (input) => inputText = input,
         ),
-        body: Column(
-          children: [
-            Container(
-              child: _users == null
-                  ? Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Icon(Icons.search, color: tertiaryColor, size: 200),
-                          Text(
-                            'Buscar perfil do Sabiá App...',
-                            style: TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.w400,
-                                color: tertiaryColor),
-                          )
-                        ],
-                      ),
-                    )
-                  : FutureBuilder(
-                      future: _users,
-                      builder: (BuildContext context,
-                          AsyncSnapshot<QuerySnapshot> snapshot) {
-                        if (!snapshot.hasData) {
-                          return const Center(
-                            // child: CircularProgressIndicator(),
-                            child: Text('Não tem snapshot data'),
-                          );
-                        }
-                        if (snapshot.data!.docs.isEmpty) {
-                          return const Center(
-                            child: Text(
-                                'Nenhum usuário encontrado com esse nome!'),
-                          );
-                        }
-                        return ListView.builder(
-                            itemCount: snapshot.data!.docs.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              UserModel user =
-                                  UserModel.fromDoc(snapshot.data!.docs[index]);
-                              return buildUserTile(user);
-                            });
-                      }),
+      ),
+      body: _users == null
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(Icons.search, color: tertiaryColor, size: 200),
+                  Text(
+                    'Buscar perfil do Pombo App...',
+                    style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w400,
+                        color: tertiaryColor),
+                  )
+                ],
+              ),
             )
-          ],
-        ));
+          : FutureBuilder(
+              future: _users,
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (!snapshot.hasData) {
+                  return const Center(
+                    child: Text('Não tem snapshot data'),
+                  );
+                }
+                if (snapshot.data!.docs.isEmpty) {
+                  return const Center(
+                    child: Text('Nenhum usuário encontrado com esse nome!'),
+                  );
+                }
+                return ListView.builder(
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      UserModel user =
+                          UserModel.fromDoc(snapshot.data!.docs[index]);
+                      return buildUserTile(user);
+                    });
+              }),
+    );
   }
 }

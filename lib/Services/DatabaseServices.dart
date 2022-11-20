@@ -256,7 +256,6 @@ class DatabaseServices {
 
     dynamic activity;
     for (activity in userActivitiesSnapshot.docs) {
-      print(activity.data());
       var coisa = Activity(
           fromUserId: activity.data()['fromUserId'],
           timestamp: activity.data()['timestamp'],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sabia_app/Constants/ColorPalette.dart';
 import 'package:sabia_app/Models/UserModel.dart';
 import 'package:sabia_app/Services/DatabaseServices.dart';
+import 'package:sabia_app/Widgets/RoundedButton.dart';
 
 class EditProfileScreen extends StatefulWidget {
   final UserModel user;
@@ -13,19 +14,18 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-  late String _name = '';
-  late String _bio = '';
+  String _name = '';
+  String _bio = '';
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
 
-  saveProfile() async {
+  saveProfile() {
     _formKey.currentState!.save();
     if (_formKey.currentState!.validate() && !_isLoading) {
       setState(() {
         _isLoading = true;
       });
     }
-    // consertar o Model de usuário para não usar mais imagens diferentes
     UserModel user = UserModel(
         id: widget.user.id,
         name: _name,
@@ -48,43 +48,27 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: primaryColor,
+        centerTitle: true,
+        elevation: 0,
+        title: const Text(
+          'Editar perfil',
+          style: TextStyle(
+              color: defaultDarkColor,
+              fontSize: 15,
+              fontWeight: FontWeight.bold),
+        ),
+      ),
       body: ListView(
         physics: const BouncingScrollPhysics(
             parent: AlwaysScrollableScrollPhysics()),
         children: [
           Container(
-            transform: Matrix4.translationValues(0, -40, 0),
+            transform: Matrix4.translationValues(0, 50, 0),
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    GestureDetector(
-                      onTap: saveProfile,
-                      child: Container(
-                        width: 100,
-                        height: 300,
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: primaryColor,
-                        ),
-                        child: const Center(
-                          child: Text(
-                            'Save',
-                            style: TextStyle(
-                              fontSize: 17,
-                              color: defaultDarkColor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
                 Form(
                     key: _formKey,
                     child: Column(
@@ -92,10 +76,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         const SizedBox(height: 30),
                         TextFormField(
                           initialValue: _name,
-                          decoration: InputDecoration(
-                            labelText: _name,
-                            labelStyle:
-                                const TextStyle(color: defaultDarkColor),
+                          decoration: const InputDecoration(
+                            labelText: 'Nome',
+                            labelStyle: TextStyle(color: defaultDarkColor),
                           ),
                           validator: (input) => input!.trim().length < 2
                               ? 'please enter valid name'
@@ -108,7 +91,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         TextFormField(
                           initialValue: _bio,
                           decoration: const InputDecoration(
-                            labelText: 'Bio',
+                            labelText: 'Biografia',
                             labelStyle: TextStyle(color: defaultDarkColor),
                           ),
                           onSaved: (value) {
@@ -124,6 +107,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             : const SizedBox.shrink()
                       ],
                     )),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      child: RoundedButton(
+                        btnText: 'Salvar alterações',
+                        onBtnPressed: () => saveProfile(),
+                      ),
+                    )
+                  ],
+                ),
               ],
             ),
           )

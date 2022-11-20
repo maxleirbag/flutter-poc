@@ -27,13 +27,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool _isFollowing = false;
   int _profileSegmentedValue = 0;
   List<dynamic> _allPombosCorreios = [];
-  // List<PomboCorreio> _mediaPombosCorreios = [];
+  String chosenMemory = DatabaseServices.randomBackgroundImagePicker();
 
   final Map<int, Widget> _profileTabs = <int, Widget>{
     0: const Padding(
       padding: EdgeInsets.symmetric(vertical: 10),
       child: Text(
-        'PombosCorreios',
+        'Pombos Correios',
         style: TextStyle(
           fontSize: 13,
           fontWeight: FontWeight.w700,
@@ -44,7 +44,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     1: const Padding(
       padding: EdgeInsets.symmetric(vertical: 10),
       child: Text(
-        'Outra coisa',
+        'Lembrança: Capa de Perfil Antiga',
         style: TextStyle(
           fontSize: 13,
           fontWeight: FontWeight.w700,
@@ -139,22 +139,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 pomboCorreio: _allPombosCorreios[index],
               );
             });
-      // case 1:
-      //   return ListView.builder(
-      //       shrinkWrap: true,
-      //       physics: const NeverScrollableScrollPhysics(),
-      //       itemCount: _mediaPombosCorreios.length,
-      //       itemBuilder: (context, index) {
-      //         return PomboCorreioContainer(
-      //           currentUserId: widget.currentUserId,
-      //           author: author,
-      //           pomboCorreio: _mediaPombosCorreios[index],
-      //         );
-      //       });
+      case 1:
+        return Container(
+          margin: const EdgeInsets.symmetric(horizontal: 50),
+          child: Image.asset(chosenMemory),
+        );
+
       default:
         return const Center(
           child: Text(
-            'Profile view deu errado',
+            'Conteúdo não pôde ser carregado.',
             style: TextStyle(fontSize: 25, color: defaultDarkColor),
           ),
         );
