@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:sabia_app/Constants/Constants.dart';
+import 'package:sabia_app/Constants/ColorPalette.dart';
 
+import '../Constants/DbInstances.dart';
 import '../Models/UserModel.dart';
 import '../Services/DatabaseServices.dart';
 import '../Widgets/PomboCorreioContainer.dart';

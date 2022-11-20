@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import '../Constants/Constants.dart';
+import '../Constants/ColorPalette.dart';
 import '../Services/auth_service.dart';
 import '../Widgets/RoundedButton.dart';
 import 'SkeletonScreen.dart';

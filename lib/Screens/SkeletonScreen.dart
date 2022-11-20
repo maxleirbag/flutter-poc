@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../Constants/Constants.dart';
+import '../Constants/ColorPalette.dart';
 import '../Services/auth_service.dart';
 import 'FeedScreen.dart';
 import 'NotificationsScreen.dart';

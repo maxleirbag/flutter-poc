@@ -4,7 +4,7 @@ import 'package:sabia_app/Models/UserModel.dart';
 import 'package:sabia_app/Screens/ProfileScreen.dart';
 import 'package:sabia_app/Services/DatabaseServices.dart';
 
-import '../Constants/Constants.dart';
+import '../Constants/ColorPalette.dart';
 
 class SearchScreen extends StatefulWidget {
   final String currentUserId;
@@ -90,8 +90,6 @@ class _SearchScreenState extends State<SearchScreen> {
             onChanged: (input) => inputText = input,
           ),
         ),
-        //
-        //
         body: Column(
           children: [
             Container(

@@ -1,9 +1,9 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:sabia_app/Constants/Constants.dart';
 import 'package:sabia_app/Models/PomboCorreio.dart';
 
+import '../Constants/DbInstances.dart';
 import '../Models/Activity.dart';
 import '../Models/UserModel.dart';
 

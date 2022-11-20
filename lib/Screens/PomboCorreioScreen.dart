@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:sabia_app/Constants/Constants.dart';
+import 'package:sabia_app/Constants/ColorPalette.dart';
 
 import '../Models/PomboCorreio.dart';
 import '../Services/DatabaseServices.dart';

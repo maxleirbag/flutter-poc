@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:sabia_app/Constants/DbInstances.dart';
 
-import '../Constants/Constants.dart';
+import '../Constants/ColorPalette.dart';
 import '../Models/Activity.dart';
 import '../Models/UserModel.dart';
 import '../Services/DatabaseServices.dart';

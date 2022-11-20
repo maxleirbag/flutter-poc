@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sabia_app/Constants/Constants.dart';
+import 'package:sabia_app/Constants/ColorPalette.dart';
 
 class RoundedButton extends StatelessWidget {
   final String btnText;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sabia_app/Constants/Constants.dart';
+import 'package:sabia_app/Constants/ColorPalette.dart';
+import 'package:sabia_app/Constants/DbInstances.dart';
 
 import '../Models/PomboCorreio.dart';
 import '../Models/UserModel.dart';

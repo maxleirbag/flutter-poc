@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sabia_app/Constants/Constants.dart';
+import 'package:sabia_app/Constants/ColorPalette.dart';
 import 'package:sabia_app/Models/UserModel.dart';
 import 'package:sabia_app/Services/DatabaseServices.dart';
 
