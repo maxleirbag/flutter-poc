@@ -1,32 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:sabia_app/Constants/Constants.dart';
 
+import '../Models/PomboCorreio.dart';
 import '../Models/UserModel.dart';
-import '../Models/ZipZop.dart';
 import '../Services/DatabaseServices.dart';
 
-class ZipZopContainer extends StatefulWidget {
-  final ZipZop zipZop;
+class PomboCorreioContainer extends StatefulWidget {
+  final PomboCorreio pomboCorreio;
   final UserModel author;
   final String currentUserId;
 
-  const ZipZopContainer(
+  const PomboCorreioContainer(
       {key,
-      required this.zipZop,
+      required this.pomboCorreio,
       required this.author,
       required this.currentUserId})
       : super(key: key);
   @override
-  _ZipZopContainerState createState() => _ZipZopContainerState();
+  _PomboCorreioContainerState createState() => _PomboCorreioContainerState();
 }
 
-class _ZipZopContainerState extends State<ZipZopContainer> {
+class _PomboCorreioContainerState extends State<PomboCorreioContainer> {
   int _likesCount = 0;
   bool _isLiked = false;
 
-  initZipZopLikes() async {
-    bool isLiked = await DatabaseServices.isLikeZipZop(
-        widget.currentUserId, widget.zipZop);
+  initPomboCorreioLikes() async {
+    bool isLiked = await DatabaseServices.isLikePomboCorreio(
+        widget.currentUserId, widget.pomboCorreio);
     if (mounted) {
       setState(() {
         _isLiked = isLiked;
@@ -34,15 +34,17 @@ class _ZipZopContainerState extends State<ZipZopContainer> {
     }
   }
 
-  likeZipZop() {
+  likePomboCorreio() {
     if (_isLiked) {
-      DatabaseServices.unlikeZipZop(widget.currentUserId, widget.zipZop);
+      DatabaseServices.unlikePomboCorreio(
+          widget.currentUserId, widget.pomboCorreio);
       setState(() {
         _isLiked = false;
         _likesCount--;
       });
     } else {
-      DatabaseServices.likeZipZop(widget.currentUserId, widget.zipZop);
+      DatabaseServices.likePomboCorreio(
+          widget.currentUserId, widget.pomboCorreio);
       setState(() {
         _isLiked = true;
         _likesCount++;
@@ -53,8 +55,8 @@ class _ZipZopContainerState extends State<ZipZopContainer> {
   @override
   void initState() {
     super.initState();
-    _likesCount = widget.zipZop.likes;
-    initZipZopLikes();
+    _likesCount = widget.pomboCorreio.likes;
+    initPomboCorreioLikes();
   }
 
   @override
@@ -84,7 +86,7 @@ class _ZipZopContainerState extends State<ZipZopContainer> {
           ),
           const SizedBox(height: 15),
           Text(
-            widget.zipZop.text,
+            widget.pomboCorreio.text,
             style: const TextStyle(
               color: defaultDarkColor,
               fontSize: 18,
@@ -102,7 +104,7 @@ class _ZipZopContainerState extends State<ZipZopContainer> {
                       _isLiked ? Icons.favorite : Icons.favorite_border,
                       color: _isLiked ? Colors.blueAccent : Colors.black,
                     ),
-                    onPressed: likeZipZop,
+                    onPressed: likePomboCorreio,
                   ),
                   Text(
                     '$_likesCount Likes',
@@ -110,7 +112,10 @@ class _ZipZopContainerState extends State<ZipZopContainer> {
                 ],
               ),
               Text(
-                widget.zipZop.timestamp.toDate().toString().substring(0, 19),
+                widget.pomboCorreio.timestamp
+                    .toDate()
+                    .toString()
+                    .substring(0, 19),
                 style: const TextStyle(color: defaultGrayColor),
               )
             ],

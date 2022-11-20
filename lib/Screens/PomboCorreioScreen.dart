@@ -2,21 +2,22 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sabia_app/Constants/Constants.dart';
 
-import '../Models/ZipZop.dart';
+import '../Models/PomboCorreio.dart';
 import '../Services/DatabaseServices.dart';
 import '../Widgets/RoundedButton.dart';
 
-class CreateZipZopScreen extends StatefulWidget {
+class CreatePomboCorreioScreen extends StatefulWidget {
   final String currentUserId;
 
-  const CreateZipZopScreen({super.key, required this.currentUserId});
+  const CreatePomboCorreioScreen({super.key, required this.currentUserId});
 
   @override
-  _CreateZipZopScreenState createState() => _CreateZipZopScreenState();
+  _CreatePomboCorreioScreenState createState() =>
+      _CreatePomboCorreioScreenState();
 }
 
-class _CreateZipZopScreenState extends State<CreateZipZopScreen> {
-  late String _zipZopText;
+class _CreatePomboCorreioScreenState extends State<CreatePomboCorreioScreen> {
+  late String _pomboCorreioText;
   bool _loading = false;
 
   @override
@@ -27,7 +28,7 @@ class _CreateZipZopScreenState extends State<CreateZipZopScreen> {
         backgroundColor: primaryColor,
         centerTitle: true,
         title: const Text(
-          'ZipZop',
+          'PomboCorreio',
           style: TextStyle(
             color: defaultDarkColor,
             fontSize: 20,
@@ -43,22 +44,22 @@ class _CreateZipZopScreenState extends State<CreateZipZopScreen> {
               maxLength: 280,
               maxLines: 7,
               decoration: const InputDecoration(
-                hintText: 'Escreva seu ZipZop',
+                hintText: 'Escreva seu Pombo Correio',
               ),
               onChanged: (value) {
-                if (value.isNotEmpty) _zipZopText = value;
+                if (value.isNotEmpty) _pomboCorreioText = value;
               },
             ),
             const SizedBox(height: 20),
             RoundedButton(
-              btnText: 'Postar ZipZop',
+              btnText: 'Postar Pombo Correio',
               onBtnPressed: () async {
                 setState(() {
                   _loading = true;
                 });
-                if (_zipZopText.isNotEmpty) {
-                  ZipZop zipZop = ZipZop(
-                    text: _zipZopText,
+                if (_pomboCorreioText.isNotEmpty) {
+                  PomboCorreio pomboCorreio = PomboCorreio(
+                    text: _pomboCorreioText,
                     authorId: widget.currentUserId,
                     likes: 0,
                     shares: 0,
@@ -67,8 +68,9 @@ class _CreateZipZopScreenState extends State<CreateZipZopScreen> {
                     ),
                     id: '${widget.currentUserId}${DateTime.now()}',
                   );
-                  DatabaseServices.createZipZop(zipZop);
-                  await DatabaseServices.getUserZipZops(widget.currentUserId);
+                  DatabaseServices.createPomboCorreio(pomboCorreio);
+                  await DatabaseServices.getUserPombosCorreios(
+                      widget.currentUserId);
                   Navigator.pop(context);
                 }
                 setState(() {
