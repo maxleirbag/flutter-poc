@@ -1,5 +1,5 @@
 # Pombo App
-### Rede social que reúne pensadores modernos.
+### Rede social que reune pensadores modernos.
 
 ## Apresentação
 link do vídeo não listado, no youtube: https://youtu.be/2fgDyiCHcAI
